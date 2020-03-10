@@ -10,46 +10,56 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/series', 'SeriesController@index')
-    ->name('listar_series')
-    ->middleware('auth');
-Route::get('/series/criar', 'SeriesController@create')
-    ->name('form_criar_serie');
-Route::post('/series/criar', 'SeriesController@store');
-Route::delete('/series/{id}', 'SeriesController@destroy');
-Route::post('/series/{id}/editaNome', 'SeriesController@editaNome');
+Route::get('/clientes', 'ClientesController@index')->name('listar_clientes');
+//     ->middleware('auth');
+Route::get('/titulos', 'TitulosController@index')->name('listar_titulos');
+Route::get('/clientes/criar', 'ClientesController@create')
+    ->name('form_criar_cliente');
 
-Route::get('/series/{serieId}/temporadas', 'TemporadasController@index');
+Route::get('/titulos/criar', 'TitulosController@create')
+    ->name('form_criar_titulo');
+    
+Route::post('/clientes/criar', 'ClientesController@store');
+Route::post('/titulos/criar', 'TitulosController@store');
 
-Route::get('/temporadas/{temporada}/episodios', 'EpisodiosController@index');
+Route::post('/clientes/{id}/alterar', 'ClientesController@update')
+->name('form_alterar_cliente');
 
-Route::post('/temporadas/{temporada}/episodios/assistir', 'EpisodiosController@assistir');
-Auth::routes();
+Route::post('/clientes/{id}/alterar', 'ClientesController@update');
+Route::post('/clientes/{id}/gravar', 'ClientesController@storeup');
+
+Route::delete('/clientes/{id}', 'ClientesController@destroy');
+Route::post('/clientes/{id}/editaNome', 'ClientesController@editaNome');
+
+// Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/entrar', 'EntrarController@index');
 
 Route::get('/sair', function () {
-    \Illuminate\Support\Facades\Auth::logout();
-    return redirect('/home');
+//     \Illuminate\Support\Facades\Auth::logout();
+    return redirect('/clientes');
 });
 
-Route::get('/buscarSeriesEmJson', function() {
-   return \App\Serie::all();
+Route::get('/buscarClientesEmJson', function() {
+   return \App\Cliente::all();
 });
 
-Route::get('/ola', function () {
-    echo "Olá Mundo!";
+Route::get('/maxi', 'ClientesController@index');
+
+Route::get('/menu',  function() {
+    return view ('menu');
 });
 
 Route::get('/', function() {
 	return view ('welcome');
 });
 
-Route::get('/filmes', 'FilmesController@listarFilmes');
+Route::get('/home',  function() {
+        return view ('menu');
+    });
 
-Route::get('/series/teste', function() {
-	return view ('teste');
+Route::get('/teste', function() {
+    return view ('layout');
 });
-Auth::routes();
 
