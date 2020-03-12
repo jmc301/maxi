@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Titulo;
 use App\Services\CriadorDeTitulo;
-use App\Services\RemovedorDeCliente;
+use App\Services\RemovedorDeTitulo;
 use Illuminate\Http\Request;
 use App\Http\Requests\TitulosFormRequest;
 
@@ -85,6 +85,18 @@ class TitulosController extends Controller
             if (empty($request->historico)) {
                $request->historico = " "; 
             }
+            if (empty($request->desconto)) {
+                $request->desconto = 0;
+            }
+            if (empty($request->multa)) {
+                $request->multa = 0;
+            }
+            if (empty($request->juros)) {
+                $request->juros = 0;
+            }
+            if (empty($request->valor_pago)) {
+                $request->valor_pago = 0;
+            }
 
             $titulo = $criadorDeTitulo->criarTitulo(
                 $request->titulo,
@@ -96,7 +108,11 @@ class TitulosController extends Controller
                 $request->cliente,
                 $request->valor,
                 $request->numerobancario,
-                $request->historico                
+                $request->historico,
+                $request->desconto,
+                $request->multa,
+                $request->juros,
+                $request->valor_pago
                 );
           
             $request->session()
@@ -109,21 +125,19 @@ class TitulosController extends Controller
             return redirect()->route('listar_titulos');
     }
     
-    public function destroy(Request $request, RemovedorDeCliente $removedorDeCliente)
+    public function destroy(Request $request, RemovedorDeTitulo $removedorDeTitulo)
     {
-        $nomeCliente = $removedorDeCliente->removerCliente($request->id);
+        $nomeTitulo = $removedorDeTitulo->removerTitulo($request->id);
         $request->session()
         ->flash(
             'mensagem',
-            "Cliente $nomeCliente removido com sucesso"
+            "Titulo $nomeTitulo removido com sucesso"
             );
-        return redirect()->route('listar_clientes');
+        return redirect()->route('listar_titulos');
     }
     
     public function update(int $id, Request $request)
     {
-        //         $cliente = Cliente::find($id);
-        
         return view('titulos.update'
             , [
                 "titulo" => Titulo::find($id)
@@ -134,27 +148,40 @@ class TitulosController extends Controller
     public function storeup(int $id, Request $request) {
         $titulo = Titulo::find($id);
         
-        $titulo->nome = $request->nome;
-        $titulo->endereco= $request->endereco;
-        $titulo->bairro= $request->bairro;
-        $titulo->cidade= $request->cidade;
-        $titulo->cep= $request->cep;
-        $titulo->emailnfe= $request->emailnfe;
-        $titulo->email= $request->email;
-        $titulo->consumidorfina= $request->consumidorfina;
-        $titulo->fiscaljuridico= $request->fiscaljuridico;
-        $titulo->cnpjcpf= $request->cnpjcpf;
-        $titulo->vendedor= $request->vendedor;
-        
+        // Realiza o Cancelamento do Titulo
+         if (!empty($titulo->pagamento)) {
+            $request->pagamento = null;
+            $request->desconto = 0;
+            $request->multa = 0;
+            $request->juros = 0;
+            $request->valor_pago = 0;
+         }
+
+
+
+         $titulo->prefixo = $request->prefixo;
+         $titulo->parcela = $request->parcela;
+         $titulo->emissao  = $request->emissao;
+         $titulo->vencimento = $request->vencimento;
+         $titulo->pagamento  = $request->pagamento;
+         $titulo->cliente   = $request->cliente;
+         $titulo->valor    = $request->valor;
+         $titulo->numerobancario = $request->numerobancario;
+         $titulo->historico = $request->historico;                
+         $titulo->desconto    = $request->desconto;
+         $titulo->multa    = $request->multa;
+         $titulo->juros    = $request->juros;
+         $titulo->valor_pago    = $request->valor_pago;
+
         $titulo->save();
         
         $request->session()
         ->flash(
             'mensagem',
-            "Cliente {$titulo->id} alterado com sucesso {$titulo->nome}"
+            "Titulo {$titulo->id} alterado com sucesso {$titulo->titulo}"
         );
         
-        return redirect()->route('listar_clientes');
+        return redirect()->route('listar_titulos');
     }
     
 //     public function editaNome(int $id, Request $request)

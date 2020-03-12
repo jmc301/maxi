@@ -42,13 +42,13 @@ Cadastro de T&iacute;tulos
     @foreach($titulos as $titulo)
     <li class="list-group-item d-flex justify-content-between align-items-center">
        <tr>        
-       <?php  if (($titulo->numerobancario==0) && ($titulo->pagamento==" ")) {?>
+       <?php  if (($titulo->numerobancario==0) && (is_null($titulo->pagamento))) {?>
                <td><span class="btn btn-success btn-sm ml-1"></span></td> 
       <?php } ?>
-       <?php  if (($titulo->numerobancario>0) && ($titulo->pagamento==" ")) {?>
+       <?php  if (($titulo->numerobancario>0) && ($titulo->pagamento == null)) {?>
                <td><span class="btn btn-dark btn-sm ml-1"></span></td> 
       <?php } ?>
-       <?php  if (($titulo->numerobancario>0) && ($titulo->pagamento != " ")) {?>
+       <?php  if ($titulo->pagamento != null) {?>
                <td><span class="btn btn-danger btn-sm ml-1"></span></td> 
       <?php } ?>      
        <td><span id="nome-titulo-{{ $titulo->prefixo }}"> {{ $titulo->prefixo }} </span></td>
@@ -73,20 +73,17 @@ Cadastro de T&iacute;tulos
         </td>
         <td>
         <span class="d-flex">
-            <button class="btn btn-info btn-sm mr-1" onclick="toggleInput({{ $titulo->id }})">
-                <i class="fas fa-edit"></i>
-            </button>
+
             <form method="post" action="/titulos/{{ $titulo->id }}"
-                  onsubmit="return confirm('Tem certeza que deseja remover {{ addslashes($titulo->titulo) }}?')">
+                  onsubmit="return confirm('Tem certeza que deseja remover o T&iacute;tulo {{ addslashes($titulo->titulo) }} ?')">
                 @csrf
-                @method('DELETE')
-                <button class="btn btn-danger btn-sm">
+                <button class="btn btn-danger btn-sm" title="Excluir">
                     <i class="far fa-trash-alt"></i>
                 </button>
             </form>
-            <form method="post" action="/titulos/{{ $titulo->id }}/alterar">
+            <form method="post" action="/titulos/{{ $titulo->id}}/alterar">
                 @csrf
-                <button class="btn btn-danger btn-sm ml-1">
+                <button class="btn btn-danger btn-sm ml-1" title="Alterar">
                     <i class="fab fa-adn"></i>
                 </button>                
             </form>

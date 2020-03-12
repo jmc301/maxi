@@ -17,7 +17,11 @@ class Titulo extends Model
         'cliente',
         'valor',
         'numerobancario',
-        'historico'
+        'historico',
+        'desconto',
+        'multa',
+        'juros',
+        'valor_pago'
     ];
        
 }

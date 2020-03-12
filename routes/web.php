@@ -25,10 +25,18 @@ Route::post('/titulos/criar', 'TitulosController@store');
 Route::post('/clientes/{id}/alterar', 'ClientesController@update')
 ->name('form_alterar_cliente');
 
+Route::post('/titulos/{id}/alterar', 'TitulosController@update')
+->name('form_alterar_titulo');
+
 Route::post('/clientes/{id}/alterar', 'ClientesController@update');
 Route::post('/clientes/{id}/gravar', 'ClientesController@storeup');
 
+Route::post('/titulos/{id}/alterar', 'TitulosController@update');
+Route::post('/titulos/{id}/gravar', 'TitulosController@storeup');
+
 Route::delete('/clientes/{id}', 'ClientesController@destroy');
+Route::post('/titulos/{id}', 'TitulosController@destroy');
+
 Route::post('/clientes/{id}/editaNome', 'ClientesController@editaNome');
 
 // Auth::routes();

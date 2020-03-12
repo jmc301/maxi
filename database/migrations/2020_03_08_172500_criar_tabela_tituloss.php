@@ -14,6 +14,7 @@ class CriarTabelaTituloss extends Migration
     public function up()
     {
         Schema::create('titulos', function (Blueprint $table) {
+            $table->increments('id');
             $table->integer('titulo');
             $table->string('prefixo',1)->nullable();
             $table->string('parcela',1)->nullable();

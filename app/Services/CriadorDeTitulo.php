@@ -17,7 +17,11 @@ class CriadorDeTitulo
         string $clienteTitulo,
         string $valorTitulo,
         string $numerobacanrioTitulo,
-        string $historicoTitulo        
+        string $historicoTitulo,        
+        string $descontoTitulo,        
+        string $multaTitulo,        
+        string $jurosTitulo,
+        string $valor_pagoTitulo
         ): Titulo {
         DB::beginTransaction();
           
@@ -31,7 +35,11 @@ class CriadorDeTitulo
             'cliente' => $clienteTitulo,
             'valor' => $valorTitulo,
             'numerobancario' => $numerobacanrioTitulo,
-            'historico' => $historicoTitulo                        
+            'historico' => $historicoTitulo,
+            'desconto' => $descontoTitulo,
+            'multa' => $multaTitulo,
+            'juros' => $jurosTitulo,
+            'valor_pago' => $valor_pagoTitulo,
         ]);
         DB::commit();
 
