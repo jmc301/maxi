@@ -49,13 +49,13 @@
 
         <div class="col col-4">
             <label for="emissao">Data Emissao<font color="red">*</font></label>
-            <input type="text" class="form-control" name="emissao" id="emissao" maxlength="10" 
+            <input type="date" class="form-control" name="emissao" id="emissao" maxlength="10" 
             value="{{ $titulo->emissao}}">
         </div>
 
         <div class="col col-4">
             <label for="vencimento">Vencimento<font color="red">*</font></label>
-            <input type="text" class="form-control" name="vencimento" id="vencimento" maxlength="10" 
+            <input type="date" class="form-control" name="vencimento" id="vencimento" maxlength="10" 
             value="{{ $titulo->vencimento}}">
         </div>
 
@@ -77,9 +77,9 @@
              value="{{ $titulo->historico}}">
         </div>
         
-        <div class="col col-2">
+        <div class="col col-3">
              <label for="pagamento">Data de Pagamento</label>
-             <input type="text" class="form-control" name="pagamento" id="pagamento" maxlength="10" 
+             <input type="date" class="form-control" name="pagamento" id="pagamento" maxlength="10" 
              value="{{ $titulo->pagamento}}">
         </div>
 
@@ -119,8 +119,6 @@
         </button>
     @endisset
 
-
-
     <div class="col col-2">
          <input type="text" class="form-control" name="id" id="id" hidden="true" value="{{ $titulo->id}}">
     </div>
@@ -138,10 +136,6 @@
 
      var dataPagamento = document.querySelector("#pagamento");
      var alterarbaixar = document.querySelector("#alterar-baixar");
-//     var nbvalor = document.querySelector("#valor");
-//     var data1 = dataPagamento.textContent;
-//     var nbvalor2 = nbvalor.textContent;
-//     var pag = pagamento.textContent;
 
      dataPagamento.addEventListener("input", function() {
 

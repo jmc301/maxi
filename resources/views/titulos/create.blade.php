@@ -40,12 +40,12 @@
 
       <div class="col col-4">
             <label for="emissao">Data Emissao<font color="red">*</font></label>
-            <input type="text" class="form-control" name="emissao" id="emissao" maxlength="10">
+            <input type="date" class="form-control" name="emissao" id="emissao" maxlength="10">
         </div>
 
       <div class="col col-4">
             <label for="vencimento">Vencimento<font color="red">*</font></label>
-            <input type="text" class="form-control" name="vencimento" id="vencimento" maxlength="10">
+            <input type="date" class="form-control" name="vencimento" id="vencimento" maxlength="10">
         </div>
 
      <div class="col col-4">
