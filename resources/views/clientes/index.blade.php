@@ -33,10 +33,18 @@ Cadastro de Clientes
 	</li>
 	
     @foreach($clientes as $cliente)
+    <?php  
+    $nomeRepresentante = "";
+    foreach ($representantes as $representante) {
+        if ($representante->id === $cliente->vendedor_id) {
+            $nomeRepresentante = $representante->nome;
+        }
+    }
+    ?>
     <li class="list-group-item d-flex justify-content-between align-items-baseline">
         <span id="nome-cliente-{{ $cliente->id }}"> {{ $cliente->id }} </span>
         <span id="nome-cliente-{{ $cliente->nome }}"> {{ $cliente->nome }} </span>
-        <span id="nome-cliente-{{ $cliente->vendedor }}"> {{ $cliente->vendedor }} </span>
+        <span id="nome-cliente-{{ $cliente->vendedor }}"> {{ $nomeRepresentante }} </span>
         <span id="nome-cliente-{{ $cliente->cnpjcpf }}"> {{ $cliente->cnpjcpf }} </span>
 
         <div class="input-group w-50" hidden id="input-nome-cliente-{{ $cliente->id }}">
@@ -50,9 +58,11 @@ Cadastro de Clientes
         </div>
 
         <span class="d-flex">
+            <!--
             <button class="btn btn-info btn-sm mr-1" onclick="toggleInput({{ $cliente->id }})">
                 <i class="fas fa-edit"></i>
             </button>
+            -->
             <form method="post" action="/clientes/{{ $cliente->id }}"
                   onsubmit="return confirm('Tem certeza que deseja remover {{ addslashes($cliente->nome) }}?')">
                 @csrf

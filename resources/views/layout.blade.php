@@ -13,6 +13,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2 d-flex justify-content-between">
         <a class="navbar-brand" href="/menu"><img src="http://localhost:8000/logo.png" class="mr-2">Home</a>
+        <a class="navbar-brand" href="{{route('listar_representantes')}}">Vendedores</a>
         <a class="navbar-brand" href="{{route('listar_clientes')}}">Clientes</a>
         <a class="navbar-brand" href="{{route('listar_titulos')}}">T&iacute;tulos</a>
         <a href="/menu" class="text-danger">Sair</a>        

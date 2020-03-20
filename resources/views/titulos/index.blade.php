@@ -21,7 +21,7 @@ Cadastro de T&iacute;tulos
      	  	</form>
      </div>
 
-<div class="row">
+<div class="row" style="border-style: solid;">
   <div class="col"><strong>Sinal</strong></div>
   <div class="col"><strong>Prefixo</strong></div>
   <div class="col"><strong>T&iacute;tulo</strong></div>

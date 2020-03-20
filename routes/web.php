@@ -11,22 +11,26 @@
 |
 */
 Route::get('/clientes', 'ClientesController@index')->name('listar_clientes');
-//     ->middleware('auth');
 Route::get('/titulos', 'TitulosController@index')->name('listar_titulos');
+Route::get('/representantes', 'RepresentantesController@index')->name('listar_representantes');
+
 Route::get('/clientes/criar', 'ClientesController@create')
     ->name('form_criar_cliente');
-
 Route::get('/titulos/criar', 'TitulosController@create')
     ->name('form_criar_titulo');
+Route::get('/representantes/criar', 'RepresentantesController@create')
+	->name('form_criar_representante');
     
 Route::post('/clientes/criar', 'ClientesController@store');
 Route::post('/titulos/criar', 'TitulosController@store');
+Route::post('/representantes/criar', 'RepresentantesController@Store');
 
 Route::post('/clientes/{id}/alterar', 'ClientesController@update')
-->name('form_alterar_cliente');
-
+	->name('form_alterar_cliente');
 Route::post('/titulos/{id}/alterar', 'TitulosController@update')
-->name('form_alterar_titulo');
+	->name('form_alterar_titulo');
+//Route::post('/titulos/{id}/alterar', 'VendedoresControllerUpdate')
+	//->name('form_alterar_vendedor');
 
 Route::post('/clientes/{id}/alterar', 'ClientesController@update');
 Route::post('/clientes/{id}/gravar', 'ClientesController@storeup');
@@ -34,8 +38,12 @@ Route::post('/clientes/{id}/gravar', 'ClientesController@storeup');
 Route::post('/titulos/{id}/alterar', 'TitulosController@update');
 Route::post('/titulos/{id}/gravar', 'TitulosController@storeup');
 
+Route::post('/representantes/{id}/alterar', 'RepresentantesController@update');
+Route::post('/representantes/{id}/gravar', 'RepresentantesController@storeup');
+
 Route::delete('/clientes/{id}', 'ClientesController@destroy');
 Route::post('/titulos/{id}', 'TitulosController@destroy');
+Route::post('/representantes/{id}', 'RepresentantesController@destroy');
 
 Route::post('/clientes/{id}/editaNome', 'ClientesController@editaNome');
 

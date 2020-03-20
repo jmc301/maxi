@@ -11,6 +11,7 @@ use App\Temporada;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\LeitorDeCliente;
+use App\Representante;
 
 // $letra = $_GET['criterio'];
 
@@ -67,25 +68,33 @@ class ClientesController extends Controller
             ->orderBy('nome')
             ->get();
         }            
-        
+
         $mensagem = $request->session()->get('mensagem');
 
-        return view('clientes.index', compact('clientes', 'mensagem'));
+        return view('clientes.index', compact('clientes', 'mensagem'),
+               [
+                "representantes" => Representante::query()->orderBy('nome')->get()
+               ]);
     }
 
     public function create()
     {
-        return view('clientes.create');
+        return view('clientes.create',
+              [
+                "representantes" => Representante::query()->orderBy('nome')->get()
+              ]);
     }
 
     public function store(
         ClientesFormRequest $request,
         CriadorDeCliente $criadorDeCliente
     ) {
+
         $cnpjcpf = $request->cnpjcpf;
         $vendedor = $request->vendedor;
+        $nome = $request->nome;
         $cliente = $criadorDeCliente->criarCliente(
-            $request->nome,
+            $nome,
             $request->endereco,
             $request->bairro,
             $request->cidade,
@@ -95,6 +104,7 @@ class ClientesController extends Controller
             $request->consumidorfina,
             $request->fiscaljuridico,
             $cnpjcpf,
+            $vendedor,
             $vendedor
         );
 
@@ -104,7 +114,11 @@ class ClientesController extends Controller
                 "Cliente {$cliente->id} criado com sucesso {$cliente->nome}"
             );
 
-        return redirect()->route('listar_clientes');
+        return redirect()->route('listar_clientes',
+            [
+                "representantes" => Representante::query()->orderBy('nome')->get()
+            ]
+        );
     }
 
     public function destroy(Request $request, RemovedorDeCliente $removedorDeCliente)
@@ -124,7 +138,8 @@ class ClientesController extends Controller
         
         return view('clientes.update'
             , [
-                "cliente" => Cliente::find($id)
+                "cliente" => Cliente::find($id),
+                "representantes" => Representante::query()->orderBy('nome')->get()
               ]
             );
     }
@@ -143,6 +158,7 @@ class ClientesController extends Controller
         $cliente->fiscaljuridico= $request->fiscaljuridico;
         $cliente->cnpjcpf= $request->cnpjcpf;
         $cliente->vendedor= $request->vendedor;
+        $cliente->vendedor_id = $request->vendedor;
        
         $cliente->save();
  

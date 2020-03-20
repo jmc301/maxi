@@ -34,9 +34,14 @@
           </select>
         </div>
 
-        <div class="col col-1">
+        <div class="col col-3">
             <label for="vendedor">Vendedor<font color="red">*</font></label>
-            <input type="text" class="form-control" name="vendedor" id="vendedor" maxlength="4">
+               <select class="custom-select" name="vendedor" id="vendedor">
+                   <option value="0" selected>Selecione...</option>
+                   @<?php foreach ($representantes as $representante): ?>
+                      <option value="{{ $representante->id }}" > {{ $representante->nome }} </option>
+                   <?php endforeach ?>
+               </select>
         </div>
                
        <div class="col col-2 ">

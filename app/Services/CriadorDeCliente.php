@@ -18,7 +18,8 @@ class CriadorDeCliente
         string $consumidorfinaCliente,
         string $fiscaljuridicoCliente,
         string $cnpjcpfCliente,
-        string $vendedorCliente
+        string $vendedorCliente,
+        string $vendedor_idCliente
         ): Cliente {
         DB::beginTransaction();
         $cliente = Cliente::create([
@@ -32,7 +33,8 @@ class CriadorDeCliente
             'consumidorfina' => $consumidorfinaCliente,
             'fiscaljuridico' => $fiscaljuridicoCliente,
             'cnpjcpf' => $cnpjcpfCliente,
-            'vendedor' => $vendedorCliente
+            'vendedor' => $vendedorCliente,
+            'vendedor_id' => $vendedorCliente
         ]);
         DB::commit();
 

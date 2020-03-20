@@ -23,9 +23,9 @@
             <input type="text" class="form-control" name="id" id="id"value="{{ $cliente->id }}" disabled>
         </div>
             
-        <div class="col col-8">
+        <div class="col col-6">
             <label for="nome">Nome <font color="red">*</font></label>
-            <input type="text" class="form-control" name="nome" id="nome" value="{{ $cliente->nome }}">
+            <input type="text" class="form-control" name="nome" id="nome" value="{{ $cliente->nome }}" maxlength="40">
         </div>
 
         <div class="col col-2">
@@ -49,19 +49,29 @@
           </select>
         </div>
 
-        <div class="col col-1">
+        <div class="col col-3">
             <label for="vendedor">Vendedor<font color="red">*</font></label>
-            <input type="text" class="form-control" name="vendedor" id="vendedor"value="{{ $cliente->vendedor }}" maxlength="4">
+               <select class="ls-select" name="vendedor" id="vendedor">
+                   <option selected value="0" ></option>
+                   @<?php foreach ($representantes as $representante): ?>
+                      $nomeRepresentante = "";
+                      <?php  if ($representante->id === $cliente->vendedor_id)  { ?>
+                               <option selected value="{{ $representante->id }}" > {{ $representante->nome }} </option>
+                      <?php    break; } else { ?>
+                         <option value="{{ $representante->id }}" > {{ $representante->nome }} </option>
+                      <?php } ?>
+                   <?php endforeach ?>
+               </select>
         </div>
 
        <div class="col col-2">
             <label for="cep">CEP</label>
-            <input type="text" class="form-control" name="cep" id="cep" value="{{ $cliente->cep }}">
+            <input type="text" class="form-control" name="cep" id="cep" value="{{ $cliente->cep }}"  maxlength="8">
        </div>
                
        <div class="col col-8">
             <label for="endereco">Endere&ccedil;o <font color="red">*</font></label>
-            <input type="text" class="form-control" name="endereco" id="endereco" value="{{ $cliente->endereco }}">
+            <input type="text" class="form-control" name="endereco" id="endereco" value="{{ $cliente->endereco }}"  maxlength="40">
         </div>
 
       <div class="col col-6">
@@ -76,13 +86,13 @@
 
      <div class="col col-8">
             <label for="email">E-mail</label>
-            <input type="email" class="form-control" name="email" id="email" value="{{ $cliente->email }}">
+            <input type="email" class="form-control" name="email" id="email" value="{{ $cliente->email }}"  maxlength="70">
         </div>
 
 
      <div class="col col-8">
             <label for="emailnfe">E-mail NF-e</label>
-            <input type="email" class="form-control" name="emailnfe" id="emailnfe" value="{{ $cliente->emailnfe }}">
+            <input type="email" class="form-control" name="emailnfe" id="emailnfe" value="{{ $cliente->emailnfe }}"  maxlength="70">
         </div>
 
         <div class="col col-2">
@@ -108,7 +118,7 @@
 
         <div class="col col-2">
              <label for="cnpjcpf">CNPJ</label>
-             <input type="text" class="form-control" name="cnpjcpf" id="cnpjcpf" value="{{ $cliente->cnpjcpf }}">
+             <input type="text" class="form-control" name="cnpjcpf" id="cnpjcpf" value="{{ $cliente->cnpjcpf }}"  maxlength="14">
         </div>
 
     </div>

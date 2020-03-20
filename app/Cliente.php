@@ -18,7 +18,8 @@ class Cliente extends Model
          'email',
          'consumidorfina',
          'fiscaljuridico',
-         'vendedor'
+         'vendedor',
+         'vendedor_id'
      ];
 
     public static function indexLetra($letra) {
