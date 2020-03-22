@@ -29,8 +29,9 @@ Route::post('/clientes/{id}/alterar', 'ClientesController@update')
 	->name('form_alterar_cliente');
 Route::post('/titulos/{id}/alterar', 'TitulosController@update')
 	->name('form_alterar_titulo');
-//Route::post('/titulos/{id}/alterar', 'VendedoresControllerUpdate')
-	//->name('form_alterar_vendedor');
+
+Route::post('/clientes/{id}/pesquisar', 'ClientesController@search')
+    ->name('form_pesquisar_cliente');
 
 Route::post('/clientes/{id}/alterar', 'ClientesController@update');
 Route::post('/clientes/{id}/gravar', 'ClientesController@storeup');

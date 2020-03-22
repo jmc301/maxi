@@ -12,6 +12,8 @@ class Cliente extends Model
          'endereco',
          'bairro',
          'cidade',
+         'uf',
+         'numero',
          'cep',
          'cnpjcpf',
          'emailnfe',

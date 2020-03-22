@@ -1,6 +1,6 @@
 @extends('layout')
 
 @section('cabecalho')
-Sistema Maxi
+Sistema Alura Cursos
 @endsection
 

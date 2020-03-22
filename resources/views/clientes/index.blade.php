@@ -68,15 +68,21 @@ Cadastro de Clientes
                 @csrf
                 @method('DELETE')
                 <button class="btn btn-danger btn-sm">
-                    <i class="far fa-trash-alt"></i>
+                    <i class="far fa-trash-alt" title="Excluir"></i>
                 </button>
             </form>
             <form method="post" action="/clientes/{{ $cliente->id }}/alterar">
                 @csrf
-                <button class="btn btn-danger btn-sm ml-1">
-                    <i class="fab fa-adn"></i>
+                <button class="btn btn-success btn-sm ml-1">
+                    <i class="fab fa-adn" title="Alterar"></i>
                 </button>                
             </form>
+            <form method="post" action="/clientes/{{ $cliente->id }}/pesquisar">
+                @csrf
+                <button class="btn btn-info btn-sm ml-1">
+                    <i class="fas fa-binoculars" title="Pesquisar"></i>
+                </button>                                
+            </form>            
         </span>
         
     </li>

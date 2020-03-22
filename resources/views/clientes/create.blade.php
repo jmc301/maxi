@@ -18,7 +18,7 @@
 <form method="post">
     @csrf
     <div class="row">
-        <div class="col col-8">
+        <div class="col col-6">
             <label for="nome">Nome <font color="red">*</font></label>
             <input type="text" class="form-control" name="nome" id="nome">
         </div>
@@ -45,8 +45,8 @@
         </div>
                
        <div class="col col-2 ">
-            <label for="cep">CEP</label>
-            <input type="text" class="form-control" name="cep" id="cep" maxlength="8">
+            <label for="cep" title="Busca CEP no site do Correio">CEP</label>
+            <input type="text" class="form-control" name="cep" id="cep" maxlength="10" title="Busca CEP no site do Correio">
         </div>
 
        <div class="col col-8">
@@ -54,14 +54,24 @@
             <input type="text" class="form-control" name="endereco" id="endereco" maxlength="40">
         </div>
 
-      <div class="col col-6">
+       <div class="col col-2 ">
+            <label for="numero">Número</label>
+            <input type="text" class="form-control" name="numero" id="numero" maxlength="5">
+        </div>
+
+       <div class="col col-6">
             <label for="bairro">Bairro<font color="red">*</font></label>
             <input type="text" class="form-control" name="bairro" id="bairro" maxlength="40">
         </div>
 
-      <div class="col col-6">
+      <div class="col col-5">
             <label for="cidade">Cidade<font color="red">*</font></label>
             <input type="text" class="form-control" name="cidade" id="cidade">
+        </div>
+
+      <div class="col col-1">
+            <label for="uf">UF<font color="red">*</font></label>
+            <input type="text" class="form-control" name="uf" id="uf" maxlength="2">
         </div>
 
      <div class="col col-8">
@@ -93,6 +103,6 @@
 
     </div>
 
-    <button class="btn btn-primary mt-2">Adicionar</button>
+    <button class="btn btn-primary mt-2">Adicionar</button>  
 </form>
 @endsection

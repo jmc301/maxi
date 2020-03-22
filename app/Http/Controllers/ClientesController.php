@@ -98,6 +98,8 @@ class ClientesController extends Controller
             $request->endereco,
             $request->bairro,
             $request->cidade,
+            $request->uf,
+            $request->numero,
             $request->cep,
             $request->emailnfe,
             $request->email,
@@ -105,7 +107,7 @@ class ClientesController extends Controller
             $request->fiscaljuridico,
             $cnpjcpf,
             $vendedor,
-            $vendedor
+            $vendedor            
         );
 
         $request->session()
@@ -134,9 +136,19 @@ class ClientesController extends Controller
 
     public function update(int $id, Request $request)
     {
-//         $cliente = Cliente::find($id);
         
         return view('clientes.update'
+            , [
+                "cliente" => Cliente::find($id),
+                "representantes" => Representante::query()->orderBy('nome')->get()
+              ]
+            );
+    }
+    
+    public function search(int $id, Request $request)
+    {
+        
+        return view('clientes.search'
             , [
                 "cliente" => Cliente::find($id),
                 "representantes" => Representante::query()->orderBy('nome')->get()

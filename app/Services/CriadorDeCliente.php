@@ -12,6 +12,8 @@ class CriadorDeCliente
         string $enderecoCliente,
         string $bairroCliente,
         string $cidadeCliente,
+        string $ufCliente,
+        string $numeroCliente,
         string $cepCliente,
         string $emailnfeCliente,
         string $emailCliente,
@@ -27,6 +29,8 @@ class CriadorDeCliente
             'endereco' => $enderecoCliente,
             'bairro' => $bairroCliente,
             'cidade' => $cidadeCliente,
+            'uf' => $ufCliente,
+            'numero' => $numeroCliente,
             'cep' => $cepCliente,
             'emailnfe' => $emailnfeCliente,
             'email' => $emailCliente,
@@ -34,7 +38,7 @@ class CriadorDeCliente
             'fiscaljuridico' => $fiscaljuridicoCliente,
             'cnpjcpf' => $cnpjcpfCliente,
             'vendedor' => $vendedorCliente,
-            'vendedor_id' => $vendedorCliente
+            'vendedor_id' => $vendedorCliente            
         ]);
         DB::commit();
 
