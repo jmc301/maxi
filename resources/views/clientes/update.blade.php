@@ -65,8 +65,8 @@
         </div>
 
        <div class="col col-2">
-            <label for="cep">CEP</label>
-            <input type="text" class="form-control" name="cep" id="cep" value="{{ $cliente->cep }}"  maxlength="8">
+            <label for="cep" title="Busca CEP no site do Correio">CEP</label>
+            <input type="text" class="form-control" name="cep" id="cep" value="{{ $cliente->cep }}"  maxlength="10" title="Busca CEP no site do Correio">
        </div>
                
        <div class="col col-8">
