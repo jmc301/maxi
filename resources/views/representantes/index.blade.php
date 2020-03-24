@@ -24,7 +24,7 @@ Cadastro de Vendedores
 <div class="row" style="border-style: solid;">
   <div class="col"><strong>Código</strong></div>
   <div class="col"><strong>Nome</strong></div>
-  <div class="col"><strong>Status</strong></div>
+  <div class="col" align="right"><strong>Status</strong></div>
 </div>
 
     @foreach($representantes as $representante)
@@ -32,20 +32,9 @@ Cadastro de Vendedores
      <div class="row">
         <div  class="col" id="nome-representante-{{ $representante->id }}"> {{ $representante->id }} </div>
         <div class="col" id="nome-representante-{{ $representante->nome }}"> {{ $representante->nome }} </div>
-        
-        <div class="col input-group w-50" hidden id="input-codigo-representante-{{ $representante->id }}">
-            <input type="text" class="form-control" value="{{ $representante->nome }}">
-            <div class="col input-group-append">
-                <button class="btn btn-primary" onclick="editarRepresentante({{ $representante->id }})">
-                    <i class="fas fa-check"></i>
-                </button>
-                @csrf
-            </div>
-        </div>
-        
-        
-        <div class="col d-flex">
-
+       
+        <div class="col d-flex flex-row-reverse">
+          <span class="d-flex">
             <form method="post" action="/representantes/{{ $representante->id }}"
                   onsubmit="return confirm('Tem certeza que deseja remover o Representante {{ addslashes($representante->nome) }} ?')">
                 @csrf
@@ -55,10 +44,11 @@ Cadastro de Vendedores
             </form>
             <form method="post" action="/representantes/{{ $representante->id}}/alterar">
                 @csrf
-                <button class="btn btn-danger btn-sm ml-1" title="Alterar">
+                <button class="btn btn-success btn-sm ml-1" title="Alterar">
                     <i class="fab fa-adn"></i>
                 </button>                
             </form>
+          </span>
         </div>        
     </div>    
     @endforeach

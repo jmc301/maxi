@@ -15,8 +15,9 @@
     </div>
 @endif
 
-<form action="/clientes">
+<form action="/posicao">
     {{csrf_field()}}
+
     <div class="row">
         <div class="col col-1">
             <label for="id">Codigo<font color="red">*</font></label>
@@ -129,8 +130,9 @@
              <input type="text" class="form-control" name="cnpjcpf" id="cnpjcpf" value="{{ $cliente->cnpjcpf }}"  disabled>
         </div>
     </div>
+    <button class="btn btn-primary mt-1 mb-3">Posição Financeira</button>
+    <button class="btn btn-primary mt-1 mb-3">Voltar</button>
 
-    <button class="btn btn-primary mt-2">Posição Financeira</button>
-    <button class="btn btn-primary mt-2">Voltar</button>
 </form>
+
 @endsection

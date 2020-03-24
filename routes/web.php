@@ -13,6 +13,7 @@
 Route::get('/clientes', 'ClientesController@index')->name('listar_clientes');
 Route::get('/titulos', 'TitulosController@index')->name('listar_titulos');
 Route::get('/representantes', 'RepresentantesController@index')->name('listar_representantes');
+Route::get('/posicao', 'TitulosController@posicao')->name('listar_posicao');
 
 Route::get('/clientes/criar', 'ClientesController@create')
     ->name('form_criar_cliente');

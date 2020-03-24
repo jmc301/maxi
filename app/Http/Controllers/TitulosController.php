@@ -7,6 +7,7 @@ use App\Services\CriadorDeTitulo;
 use App\Services\RemovedorDeTitulo;
 use Illuminate\Http\Request;
 use App\Http\Requests\TitulosFormRequest;
+use Illuminate\Support\Facades\DB;
 
 // $letra = $_GET['criterio'];
 
@@ -58,15 +59,121 @@ class TitulosController extends Controller
             ->orderBy('titulo')
             ->get();
         }
-        
-//         var_dump($titulos);
-//         exit;
-        
+ 
         $mensagem = $request->session()->get('mensagem');
         
         return view('titulos.index', compact('titulos', 'mensagem'));
     }
-    
+
+  public function posicao(Request $request) {
+        
+        $letra = "";
+        if(isset($_GET['criterio'])) {
+            $letra = $_GET['criterio'];
+        }
+        
+        $avencer = "";
+        if(isset($_GET['avencer'])) {
+            $avencer = $_GET['avencer'];
+        }
+        $vencido = "";
+        if(isset($_GET['vencido'])) {
+            $vencido = $_GET['vencido'];
+        }
+        $pago = "";
+        if(isset($_GET['pago'])) {
+            $pago = $_GET['pago'];            
+        }
+
+        $pedido = "";
+        if(isset($_GET['pedido'])) {
+            $pedido = $_GET['pedido'];
+        }
+        $faturamento = "";
+        if(isset($_GET['faturamento'])) {
+            $faturamento = $_GET['faturamento'];
+        }
+
+         $titulos = Titulo::query()->orWhere('titulo', 'LIKE', '%' . $letra . '%')
+         ->orderBy('titulo')
+         ->get();
+
+        // Somente a vencer
+        if (($avencer == "S") && ($pago == "") && ($vencido == "") && ($faturamento == "") && ($pedido == "")) {
+             $hoje = date('Y-m-d');
+             $titulos = Titulo::query('titulos')->where('vencimento', '>', $hoje)
+                 ->whereNull('pagamento')
+                 ->orderBy('titulo')
+                 ->get();
+         }
+
+        // Somente pagos
+        if (($avencer == "") && ($pago == "S") && ($vencido == "") && ($faturamento == "") && ($pedido == "")) {
+             $hoje = date('Y-m-d');
+             $titulos = Titulo::query('titulos')->where('pagamento', '<>', null)
+                 ->orderBy('titulo')
+                 ->get();
+         }
+
+        // Somente a vencidos
+        if (($avencer == "") && ($pago == "") && ($vencido == "S") && ($faturamento == "") && ($pedido == "")) {
+             $hoje = date('Y-m-d');
+             $titulos = Titulo::query('titulos')->where('vencimento', '<', $hoje)
+                 ->orderBy('titulo')
+                 ->get();
+         }
+
+        // Somente a vencer e pagos
+        if (($avencer == "S") && ($pago == "S")) {
+             $hoje = date('Y-m-d');
+             $titulos = Titulo::query('titulos')->where('vencimento', '>', $hoje)
+                 ->orWhere('pagamento', '<>', null)
+                 ->orderBy('titulo')
+                 ->get();
+         }
+
+         // Somente a vencer e vencidos
+         if (($avencer == "S") && ($vencido == "S")) {
+             $hoje = date('Y-m-d');
+             $titulos = Titulo::query('titulos')->whereNull('pagamento')
+                 ->orderBy('titulo')
+                 ->get();
+         }
+
+         // Somente pagos e vencidos
+         if (($pago == "S") && ($vencido == "S")) {
+             $hoje = date('Y-m-d');
+             $titulos = Titulo::query('titulos')->where('pagamento', '<>', null)
+                 ->orWhere('vencimento', '<', $hoje)
+                 ->orderBy('titulo')
+                 ->get();
+         }
+
+        // Somente a vencer e pagos e vencidos
+        if (($avencer == "S") && ($pago == "S") && ($vencido == "S")) {
+             $hoje = date('Y-m-d');
+             $titulos = Titulo::query('titulos')->where('vencimento', '>', $hoje)
+                 ->orWhere('pagamento', '<>', null)
+                 ->orWhere('vencimento', '<', $hoje)
+                 ->orderBy('titulo')
+                 ->get();
+         }
+         $contador = 0;
+         foreach ($titulos as $titulo) {
+             $contador++;
+         }        
+
+        if ($contador==0) {
+            $titulos = Titulo::query()
+                ->orderBy('titulo')
+                ->get();
+        }
+       
+        $mensagem = $request->session()->get('mensagem');
+        
+        return view('posicao.index', compact('titulos', 'mensagem'));
+    }    
+
     public function create()
     {
         return view('titulos.create');

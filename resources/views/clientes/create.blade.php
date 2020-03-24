@@ -96,9 +96,9 @@
           </select>
         </div>
 
-        <div class="col col-2">
+        <div class="col col-3">
              <label for="cnpjcpf">CNPJ</label>
-             <input type="text" class="form-control" name="cnpjcpf" id="cnpjcpf" maxlength="14">
+             <input type="text" class="form-control" name="cnpjcpf" id="cnpjcpf" maxlength="20">
         </div>
 
     </div>
