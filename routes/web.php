@@ -49,14 +49,14 @@ Route::post('/representantes/{id}', 'RepresentantesController@destroy');
 
 Route::post('/clientes/{id}/editaNome', 'ClientesController@editaNome');
 
-// Auth::routes();
+Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/entrar', 'EntrarController@index');
 
 Route::get('/sair', function () {
-//     \Illuminate\Support\Facades\Auth::logout();
-    return redirect('/clientes');
+     \Illuminate\Support\Facades\Auth::logout();
+    return redirect('/home');
 });
 
 Route::get('/buscarClientesEmJson', function() {
@@ -67,7 +67,7 @@ Route::get('/maxi', 'ClientesController@index');
 
 Route::get('/menu',  function() {
     return view ('menu');
-});
+})->middleware('auth');
 
 Route::get('/', function() {
 	return view ('welcome');
@@ -81,3 +81,7 @@ Route::get('/teste', function() {
     return view ('layout');
 });
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

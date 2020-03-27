@@ -18,7 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/series', function() {
-    return \App\Serie::all();
+Route::get('/clientes', function() {
+    return \App\Cliente::all();
 });
-

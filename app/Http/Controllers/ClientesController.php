@@ -13,21 +13,19 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\LeitorDeCliente;
 use App\Representante;
 
-// $letra = $_GET['criterio'];
-
 class ClientesController extends Controller
 {
-//     public function __construct()
-//     {
-//         $this->middleware('auth');
-//     }
+     public function __construct()
+     {
+         $this->middleware('auth');
+     }
     
     public function index(Request $request) {
 
-//         if(!Auth::check()) {
-//             echo "Não Autenticado";
-//             exit();
-//         }
+         if(!Auth::check()) {
+             echo "Não Autenticado";
+             exit();
+         }
         
         $letra = "";
         if(isset($_GET['criterio'])) {

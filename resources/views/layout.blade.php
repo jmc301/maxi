@@ -17,7 +17,9 @@
         <a class="navbar-brand" href="{{route('listar_representantes')}}">Vendedores</a>
         <a class="navbar-brand" href="{{route('listar_clientes')}}">Clientes</a>
         <a class="navbar-brand" href="{{route('listar_titulos')}}">T&iacute;tulos</a>
-        <a href="/menu" class="text-danger">Sair</a>        
+        @auth()
+        <a href="/sair" class="text-danger">Sair</a>  
+        @endauth()      
     </nav>
          
     <div class="container">

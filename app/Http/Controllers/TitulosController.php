@@ -6,6 +6,7 @@ use App\Titulo;
 use App\Services\CriadorDeTitulo;
 use App\Services\RemovedorDeTitulo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\TitulosFormRequest;
 use Illuminate\Support\Facades\DB;
 
@@ -13,8 +14,19 @@ use Illuminate\Support\Facades\DB;
 
 class TitulosController extends Controller
 {
+
+    public function __construct()
+        {
+           $this->middleware('auth');
+        }
+
     public function index(Request $request) {
-        
+
+        if(!Auth::check()) {
+             echo "Não Autenticado";
+             exit();
+        }
+
         $letra = "";
         if(isset($_GET['criterio'])) {
             $letra = $_GET['criterio'];
