@@ -45,7 +45,7 @@
         </div>
                
        <div class="col col-2 ">
-            <label for="cep" title="Busca CEP no site do Correio">CEP</label>
+            <label for="cep" title="Busca CEP no site do Correio">CEP <font color="red">*</font></label>
             <input type="text" class="form-control" name="cep" id="cep" maxlength="10" title="Busca CEP no site do Correio">
         </div>
 
@@ -55,7 +55,7 @@
         </div>
 
        <div class="col col-2 ">
-            <label for="numero">Número</label>
+            <label for="numero">Número <font color="red">*</font></label>
             <input type="text" class="form-control" name="numero" id="numero" maxlength="5">
         </div>
 
@@ -74,18 +74,18 @@
             <input type="text" class="form-control" name="uf" id="uf" maxlength="2">
         </div>
 
-     <div class="col col-8">
+     <div class="col col-7">
             <label for="email">E-mail</label>
             <input type="email" class="form-control" name="email" id="email" maxlength="50">
         </div>
 
 
-     <div class="col col-8">
+     <div class="col col-7">
             <label for="emailnfe">E-mail NF-e</label>
             <input type="email" class="form-control" name="emailnfe" id="emailnfe" maxlength="50">
         </div>
 
-        <div class="col col-2">
+        <div class="col col-3">
           <div class="input-group-prepend">
             <label for="fiscaljuridico">F&iacute;sica/Jur&iacute;d.</label>
           </div>
@@ -97,7 +97,7 @@
         </div>
 
         <div class="col col-3">
-             <label for="cnpjcpf">CNPJ</label>
+             <label for="cnpjcpf">CNPJ <font color="red">*</font></label>
              <input type="text" class="form-control" name="cnpjcpf" id="cnpjcpf" maxlength="20">
         </div>
 

@@ -27,7 +27,11 @@ class ClientesFormRequest extends FormRequest
             'nome' => 'required',
             'endereco' => 'required',
             'bairro' => 'required',
-            'cidade' => 'required'
+            'cidade' => 'required',
+            'uf' => 'required',
+            'numero' => 'required',
+            'vendedor' => 'required',
+            'cnpjcpf' => 'required'            
         ];
     }
 

@@ -88,11 +88,22 @@ class ClientesController extends Controller
         CriadorDeCliente $criadorDeCliente
     ) {
 
-        $cnpjcpf = $request->cnpjcpf;
-        $vendedor = $request->vendedor;
-        $nome = $request->nome;
+        if($request->nome == null) { $request->nome = " ";}
+        if($request->endereco == null) { $request->endereco = " ";}
+        if($request->bairro  == null) { $request->bairro = " ";}
+        if($request->cidade  == null) { $request->cidade = " ";}
+        if($request->uf  == null) { $request->uf = " ";}
+        if($request->numero  == null) { $request->numero = 0;}
+        if($request->cep  == null) { $request->cep = " ";}
+        if($request->emailnfe  == null) { $request->emailnfe = " ";}
+        if($request->email  == null) { $request->email = " ";}
+        if($request->consumidorfina  == null) { $request->consumidorfina = " ";}
+        if($request->fiscaljuridico  == null) { $request->fiscaljuridico = " ";}
+        if($request->cnpjcpf  == null) { $request->cnpjcpf = " ";}
+        if($request->vendedor  == null) { $request->vendedor = 0;}
+       
         $cliente = $criadorDeCliente->criarCliente(
-            $nome,
+            $request->nome,
             $request->endereco,
             $request->bairro,
             $request->cidade,
@@ -103,9 +114,9 @@ class ClientesController extends Controller
             $request->email,
             $request->consumidorfina,
             $request->fiscaljuridico,
-            $cnpjcpf,
-            $vendedor,
-            $vendedor            
+            $request->cnpjcpf,
+            $request->vendedor,
+            $request->vendedor            
         );
 
         $request->session()
@@ -156,7 +167,21 @@ class ClientesController extends Controller
     
     public function storeup(int $id, Request $request) {
         $cliente = Cliente::find($id);
-        
+
+        if($request->nome == null) { $request->nome = " ";}
+        if($request->endereco == null) { $request->endereco = " ";}
+        if($request->bairro  == null) { $request->bairro = " ";}
+        if($request->cidade  == null) { $request->cidade = " ";}
+        if($request->uf  == null) { $request->uf = " ";}
+        if($request->numero  == null) { $request->numero = 0;}
+        if($request->cep  == null) { $request->cep = " ";}
+        if($request->emailnfe  == null) { $request->emailnfe = " ";}
+        if($request->email  == null) { $request->email = " ";}
+        if($request->consumidorfina  == null) { $request->consumidorfina = " ";}
+        if($request->fiscaljuridico  == null) { $request->fiscaljuridico = " ";}
+        if($request->cnpjcpf  == null) { $request->cnpjcpf = " ";}
+        if($request->vendedor  == null) { $request->vendedor = 0;}
+                
         $cliente->nome = $request->nome;
         $cliente->endereco= $request->endereco;
         $cliente->bairro= $request->bairro;
