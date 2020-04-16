@@ -40,7 +40,7 @@
 
       <div class="col col-4">
             <label for="emissao">Data Emissao<font color="red">*</font></label>
-            <input type="date" class="form-control" name="emissao" id="emissao" maxlength="10">
+            <input type="date" class="form-control" name="emissao" id="emissao" maxlength="10" disabled>
         </div>
 
       <div class="col col-4">

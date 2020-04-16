@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Episodio;
-use App\Http\Requests\ClientesFormRequest;
+use App\Http\Requests\PedidosFormRequest;
+use App\Pedido;
 use App\Cliente;
-use App\Services\CriadorDeCliente;
-use App\Services\RemovedorDeCliente;
+use App\Nota;
+use App\Services\CriadorDePedido;
+use App\Services\RemovedorDePedido;
 use App\Temporada;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,7 @@ use App\Services\LeitorDeCliente;
 use App\Representante;
 use Illuminate\Support\Facades\DB;
 
-class ClientesController extends Controller
+class PedidosController extends Controller
 {
      public function __construct()
      {
@@ -35,8 +36,8 @@ class ClientesController extends Controller
         
         if ($letra != "") {
 
-            $clientes = Cliente::query()->orWhere('nome', 'LIKE', '%' . $letra . '%')
-            ->orderBy('nome')
+            $pedidos = Pedido::query()->orWhere('nome', 'LIKE', '%' . $letra . '%')
+            ->orderBy('pedido')
                 ->get();
 
             $contador = 0;
@@ -72,93 +73,114 @@ class ClientesController extends Controller
         }        
 
         if($letra == "") {
-            $clientes = Cliente::query()->orderBy('nome')->get();            
+            $pedidos = Pedido::query()->orderBy('pedido')->get();            
         }
 
         $mensagem = $request->session()->get('mensagem');
 
-        return view('clientes.index', compact('clientes', 'mensagem'),
+        return view('pedidos.index', compact('pedidos', 'mensagem'),
                [
-                "representantes" => Representante::query()->orderBy('nome')->get()
-               ]);
+                "clientes" => Cliente::query()->orderBy('nome')->get()
+               ]
+           );
     }
 
     public function create()
     {
-        return view('clientes.create',
+        return view('pedidos.create',
               [
                 "representantes" => Representante::query()->orderBy('nome')->get()
-              ]);
+              ],
+               [
+                "clientes" => Cliente::query()->orderBy('nome')->get()
+               ]              
+          );
     }
 
     public function store(
-        ClientesFormRequest $request,
-        CriadorDeCliente $criadorDeCliente
+        PedidosFormRequest $request,
+        CriadorDePedido $criadorDePedido
     ) {
        
-        $cliente = $criadorDeCliente->criarCliente($request);
+        $pedido = $criadorDePedido->criarPedido($request);
 
         $request->session()
             ->flash(
                 'mensagem',
-                "Cliente {$cliente->id} criado com sucesso {$cliente->nome}"
+                "Pedido {$pedido->id} criado com sucesso {$pedido->id}"
             );
 
-        return redirect()->route('listar_clientes',
+        return redirect()->route('listar_pedidos',
             [
-                "representantes" => Representante::query()->orderBy('nome')->get()
+                "clientes" => Cliente::query()->orderBy('nome')->get()
             ]
         );
     }
 
-    public function destroy(Request $request, RemovedorDeCliente $removedorDeCliente)
+    public function destroy(Request $request, RemovedorDePedido $removedorDePedido)
     {
-        $nomeCliente = $removedorDeCliente->removerCliente($request->id);
+        $nomePedido = $removedorDePedido->removerPedido($request->id);
         $request->session()
             ->flash(
                 'mensagem',
-                "Cliente $nomeCliente removido com sucesso"
+                "Pedido removido com sucesso"
             );
-        return redirect()->route('listar_clientes');
+        return redirect()->route('listar_pedidos');
     }
 
     public function update(int $id, Request $request)
     {
         
-        return view('clientes.update'
+        return view('pedidos.update'
             , [
-                "cliente" => Cliente::find($id),
-                "representantes" => Representante::query()->orderBy('nome')->get()
+                "pedido" => Pedido::find($id),
+                "clientes" => Cliente::query()->orderBy('nome')->get()
               ]
             );
     }
     
     public function storeup(int $id, Request $request) {
-        $cliente = Cliente::find($id);
+        $pedido = Pedido::find($id);
 
         DB::beginTransaction();             
-        $cliente->nome = $request->nome;
-        $cliente->endereco= $request->endereco;
-        $cliente->bairro= $request->bairro;
-        $cliente->cidade= $request->cidade;
-        $cliente->cep= $request->cep;
-        $cliente->emailnfe= $request->emailnfe;
-        $cliente->email= $request->email;
-        $cliente->consumidorfina= $request->consumidorfina;
-        $cliente->fiscaljuridico= $request->fiscaljuridico;
-        $cliente->cnpjcpf= $request->cnpjcpf;
-        $cliente->vendedor= $request->vendedor;
-        $cliente->vendedor_id = $request->vendedor;       
-        $cliente->save();
+        $pedido->condicao_pagamento = $request->condicao_pagamento;
+        $pedido->cliente_id = $request->cliente_id;       
+        $pedido->valor = $request->valor;       
+        $pedido->save();
         DB::commit();
 
         $request->session()
             ->flash(
                 'mensagem',
-                "Cliente {$cliente->id} alterado com sucesso {$cliente->nome}"
+                "Pedido {$pedido->id} alterado com sucesso"
              );
             
-        return redirect()->route('listar_clientes');
+        return redirect()->route('listar_pedidos');
+    }
+
+    public function faturar(int $id, Request $request) {
+        $pedido = Pedido::find($id);
+
+        DB::beginTransaction();             
+        $pedido->status = 'F';       
+        $pedido->save();
+
+        $nota = new Nota();
+        $nota->nota = $pedido->id;
+        $nota->data_emissao = date('Y-m-d');
+        $nota->cliente_id = $pedido->cliente_id;
+        $nota->pedido_id = $pedido->id;
+        $nota->valor = $pedido->valor;
+        $nota->save();
+        DB::commit();
+
+        $request->session()
+            ->flash(
+                'mensagem',
+                "Pedido {$pedido->id} Faturado com sucesso"
+             );
+            
+        return redirect()->route('listar_pedidos');
     }
 
    public function search(int $id, Request $request)

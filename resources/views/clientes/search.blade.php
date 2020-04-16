@@ -15,13 +15,13 @@
     </div>
 @endif
 
-<form action="/posicao">
+<form action="/posicao/{id}">
     {{csrf_field()}}
 
     <div class="row">
         <div class="col col-1">
             <label for="id">Codigo<font color="red">*</font></label>
-            <input type="text" class="form-control" name="id" id="id"value="{{ $cliente->id }}" disabled>
+            <input type="text" class="form-control" name="id" id="id" value="{{ $cliente->id }}" readonly="true">
         </div>
             
         <div class="col col-6">

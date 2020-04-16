@@ -32,7 +32,7 @@ class ClientesFormRequest extends FormRequest
             'numero' => 'required',
             'vendedor' => 'required',
             'cnpjcpf' => 'required'            
-        ];
+        ]; 
     }
 
     public function messages()

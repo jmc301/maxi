@@ -9,14 +9,36 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2 d-flex justify-content-between">
+    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2 d-flex justify-content-between"> -->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
         <!-- <a class="navbar-brand" href="/menu"><img src="http://localhost:8000/logo.png" class="mr-2">Home</a> -->
         <a class="navbar-brand" href="/menu">Home</a>
-        <a class="navbar-brand" href="{{route('listar_representantes')}}">Vendedores</a>
-        <a class="navbar-brand" href="{{route('listar_clientes')}}">Clientes</a>
+        <a class="navbar-brand" href="{{route('listar_pedidos')}}">Pedidos</a>
+        <!-- <a class="navbar-brand" href="{{route('listar_representantes')}}">Vendedores</a> -->
+        <!-- <a class="navbar-brand" href="{{route('listar_clientes')}}">Clientes</a> -->
         <a class="navbar-brand" href="{{route('listar_titulos')}}">T&iacute;tulos</a>
+
+        <!-- Links -->
+        <ul class="navbar-nav ">
+            <!-- Dropdown -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle navbar-brand" href="#" id="navbardrop" data-toggle="dropdown">
+                Cadastros
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{route('listar_clientes')}}"><strong>Clientes</strong></a>
+                <a class="dropdown-item" href="{{route('listar_representantes')}}"><strong>Vendedores</strong></a>
+                <a class="dropdown-item" href="{{route('listar_condpagamentos')}}"><strong>Condição de Pagamento</strong></a>
+              </div>
+            </li>
+        </ul>
+
         @auth()
         <a href="/sair" class="text-danger">Sair</a>  
         @endauth()      

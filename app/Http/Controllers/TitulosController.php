@@ -106,31 +106,39 @@ class TitulosController extends Controller
             $faturamento = $_GET['faturamento'];
         }
 
-         $titulos = Titulo::query()->orWhere('titulo', 'LIKE', '%' . $letra . '%')
+         $id = $request->id;
+
+         $titulos = Titulo::query()->orWhere('cliente', '=', $id)         
          ->orderBy('titulo')
          ->get();
 
-        // Somente a vencer
-        if (($avencer == "S") && ($pago == "") && ($vencido == "") && ($faturamento == "") && ($pedido == "")) {
+        // Somente a vencer             
+        if(isset($_GET["avencer"])) {
+
              $hoje = date('Y-m-d');
-             $titulos = Titulo::query('titulos')->where('vencimento', '>', $hoje)
+             $titulos = Titulo::query()
+                 ->where('vencimento', '>', $hoje)
+                 ->where('cliente', '=', $id)             
                  ->whereNull('pagamento')
                  ->orderBy('titulo')
                  ->get();
-         }
+        }
 
         // Somente pagos
-        if (($avencer == "") && ($pago == "S") && ($vencido == "") && ($faturamento == "") && ($pedido == "")) {
+        if(isset($_GET["pago"])) {
              $hoje = date('Y-m-d');
              $titulos = Titulo::query('titulos')->where('pagamento', '<>', null)
+                 ->where('cliente', '=', $id)  
                  ->orderBy('titulo')
                  ->get();
          }
 
         // Somente a vencidos
-        if (($avencer == "") && ($pago == "") && ($vencido == "S") && ($faturamento == "") && ($pedido == "")) {
+        //if (($avencer == "") && ($pago == "") && ($vencido == "S") && ($faturamento == "") && ($pedido == "")) {
+        if(isset($_GET["vencidos"])) {
              $hoje = date('Y-m-d');
              $titulos = Titulo::query('titulos')->where('vencimento', '<', $hoje)
+                 ->where('cliente', '=', $id)  
                  ->orderBy('titulo')
                  ->get();
          }
@@ -139,6 +147,7 @@ class TitulosController extends Controller
         if (($avencer == "S") && ($pago == "S")) {
              $hoje = date('Y-m-d');
              $titulos = Titulo::query('titulos')->where('vencimento', '>', $hoje)
+                 ->where('cliente', '=', $id)  
                  ->orWhere('pagamento', '<>', null)
                  ->orderBy('titulo')
                  ->get();
@@ -148,6 +157,7 @@ class TitulosController extends Controller
          if (($avencer == "S") && ($vencido == "S")) {
              $hoje = date('Y-m-d');
              $titulos = Titulo::query('titulos')->whereNull('pagamento')
+                 ->where('cliente', '=', $id)  
                  ->orderBy('titulo')
                  ->get();
          }
@@ -156,6 +166,7 @@ class TitulosController extends Controller
          if (($pago == "S") && ($vencido == "S")) {
              $hoje = date('Y-m-d');
              $titulos = Titulo::query('titulos')->where('pagamento', '<>', null)
+                 ->where('cliente', '=', $id)  
                  ->orWhere('vencimento', '<', $hoje)
                  ->orderBy('titulo')
                  ->get();
@@ -165,6 +176,7 @@ class TitulosController extends Controller
         if (($avencer == "S") && ($pago == "S") && ($vencido == "S")) {
              $hoje = date('Y-m-d');
              $titulos = Titulo::query('titulos')->where('vencimento', '>', $hoje)
+                 ->where('cliente', '=', $id)  
                  ->orWhere('pagamento', '<>', null)
                  ->orWhere('vencimento', '<', $hoje)
                  ->orderBy('titulo')
@@ -175,15 +187,18 @@ class TitulosController extends Controller
              $contador++;
          }        
 
-        if ($contador==0) {
-            $titulos = Titulo::query()
-                ->orderBy('titulo')
-                ->get();
+        if (!isset($_GET["avencer"]) && !isset($_GET["pago"]) && !isset($_GET["vencidos"])) {
+            if ($contador==0) {
+                $titulos = Titulo::query()
+                    ->where('cliente', '=', $id)  
+                    ->orderBy('titulo')
+                    ->get();
+            }
         }
        
         $mensagem = $request->session()->get('mensagem');
         
-        return view('posicao.index', compact('titulos', 'mensagem'));
+        return view('posicao.index', compact('titulos', 'mensagem', 'id'));
     }    
 
     public function create()
@@ -195,52 +210,14 @@ class TitulosController extends Controller
         TitulosFormRequest $request,
         CriadorDeTitulo $criadorDeTitulo
         ) { 
-            if (empty($request->pagamento)) {
-               $request->pagamento = " "; 
-            }
-            if (empty($request->numerobancario)) {
-               $request->numerobancario = 0; 
-            }
-            if (empty($request->historico)) {
-               $request->historico = " "; 
-            }
-            if (empty($request->desconto)) {
-                $request->desconto = 0;
-            }
-            if (empty($request->multa)) {
-                $request->multa = 0;
-            }
-            if (empty($request->juros)) {
-                $request->juros = 0;
-            }
-            if (empty($request->valor_pago)) {
-                $request->valor_pago = 0;
-            }
-
-            $titulo = $criadorDeTitulo->criarTitulo(
-                $request->titulo,
-                $request->prefixo,
-                $request->parcela,
-                $request->emissao,
-                $request->vencimento,
-                $request->pagamento,
-                $request->cliente,
-                $request->valor,
-                $request->numerobancario,
-                $request->historico,
-                $request->desconto,
-                $request->multa,
-                $request->juros,
-                $request->valor_pago
-                );
+             $titulo = $criadorDeTitulo->criarTitulo($request);
           
             $request->session()
             ->flash(
                 'mensagem',
                 "Titulo {$titulo->titulo} criado com sucesso {$titulo->cliente}"
             );
-            
-            
+                    
             return redirect()->route('listar_titulos');
     }
     

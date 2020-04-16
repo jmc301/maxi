@@ -8,6 +8,7 @@ Posição Financeira
 
 @include('mensagem', ['mensagem' => $mensagem])
 
+<!--
      <div class="btn btn-group mb-2">
             <a href="#" class=" btn-dark btn-group-item btn-ml"></a>
      	  	<form action="{{ url('/posicao')}}"  method="get">
@@ -15,8 +16,8 @@ Posição Financeira
                <div class="row">
                       <div class="col form-check">
                         <label class="form-check-label">
-                          <!--
-                          <input type="checkbox" class="form-check-input" onclick="if(this.checked){this.form.submit()}"value="S" name="avencer">A Vencer  -->
+                          <!-
+                          <input type="checkbox" class="form-check-input" onclick="if(this.checked){this.form.submit()}"value="S" name="avencer">A Vencer  ->
                           <input type="checkbox" class="form-check-input" value="S" name="avencer">A Vencer
                         </label>
                       </div>
@@ -51,20 +52,62 @@ Posição Financeira
                 </div>
      	  	</form>
      </div>
+-->
 
-<div class="row" style="border-style: solid;">
-  <div class="col"><strong>Sinal</strong></div>
-  <div class="col"><strong>Prefixo</strong></div>
-  <div class="col"><strong>T&iacute;tulo</strong></div>
-  <div class="col"><strong>Parcela</strong></div>
-  <div class="col"><strong>Cliente</strong></div>
-  <div class="col"><strong>Emiss&atilde;o</strong></div>
-  <div class="col"><strong>Vencimento</strong></div>
-  <div class="col"><strong>Valor</strong></div>
-  <div class="col"><strong>N&uacute;m.Banc&aacute;rio</strong></div>
-  <div class="col"><strong>Hist&oacute;rico</strong></div>
-  <div class="col"><strong>Status</strong></div>  
-</div>
+          <form action="/posicao/{id}">
+              <div class="row ">
+                      <div class="col form-check pb-2">
+                        <label class="form-check-label">
+                          <button name="avencer" class="btn btn-primary mt-2" onclick="javascript: popavencer();">
+                          A Vencer</button>
+                        </label>
+                      </div>
+                      <div class="col form-check">
+                        <label class="form-check-label">
+                          <button name="pago" class="btn btn-primary mt-2" onclick="javascript: poppagos();">Pagos</button>
+                        </label>
+                      </div>
+                      <div class="col form-check">
+                        <label class="form-check-label">
+                          <button name="vencidos" class="btn btn-primary mt-2" onclick="javascript: popvencidos();">Vencidos</button>
+                        </label>
+                      </div>
+                      <div class="col form-check">
+                        <label class="form-check-label">
+                          <button class="btn btn-primary mt-2" onclick="javascript: popfatura();" disabled>Faturamento</button>
+                        </label>
+                      </div>               
+                      <div class="col form-check">
+                        <label class="form-check-label">
+                          <button class="btn btn-primary mt-2" onclick="javascript: poppedidos();" disabled>Pedidos</button>
+                        </label>
+                      </div>               
+                      <div class="col form-check">
+                        <label class="form-check-label">
+                          <button class="btn btn-primary mt-2">Todos</button>
+                        </label>
+                      </div>     
+                      <div class="col">
+                      <input type="text" name="id" id="id" value="{{ $id }}" hidden>    
+                      </div>      
+          </form>     
+
+<table class="table">
+    <thead>
+       <tr>
+          <th><strong>Sinal</strong></th>
+          <th><strong>Prefixo</strong></th>
+          <th><strong>T&iacute;tulo</strong></th>
+          <th><strong>Parcela</strong></th>
+          <th><strong>Cliente</strong></th>
+          <th><strong>Emiss&atilde;o</strong></th>
+          <th><strong>Vencimento</strong></th>
+          <th><strong>Valor</strong></th>
+          <th><strong>N&uacute;m.Banc&aacute;rio</strong></th>
+          <th><strong>Hist&oacute;rico</strong></th>
+          <th><strong>Status</strong></th>  
+      </tr>
+    </thead>
 
     @foreach($titulos as $titulo)
      <?php 
@@ -79,46 +122,84 @@ Posição Financeira
        }                   
      ?> 
 
-     <div class="row">
-       <?php  if (($titulo->numerobancario==0) && (is_null($titulo->pagamento))) {?>
-               <div class="col"><span class="btn btn-success btn-sm ml-1"></span></div> 
-      <?php } ?>
-       <?php  if (($titulo->numerobancario>0) && ($titulo->pagamento == null)) {?>
-               <div class="col"><span class="btn btn-dark btn-sm ml-1"></div> 
-      <?php } ?>
-       <?php  if ($titulo->pagamento != null) {?>
-               <div class="col"><span class="btn btn-danger btn-sm ml-1"></span></div> 
-      <?php } ?>      
-        <div class="col" id="nome-titulo-{{ $titulo->prefixo }}"> {{ $titulo->prefixo }} </div>
-        <div class="col" id="nome-titulo-{{ $titulo->titulo }}"> {{ $titulo->titulo }} </div>
-        <div class="col" id="nome-titulo-{{ $titulo->parcela }}"> {{ $titulo->parcela }} </div>
-        <div class="col" id="nome-titulo-{{ $titulo->cliente }}"> {{ $titulo->cliente }} </div>
-        <div class="col" id="nome-titulo-{{ $titulo->emissao }}"> {{ $dataEmissao }} </div>
-        <div class="col" id="nome-titulo-{{ $titulo->vencimento }}"> {{ $dataVencimento }} </div>
-        <div class="col" id="nome-titulo-{{ $titulo->valor }}"> {{ $titulo->valor }} </div>
-        <div class="col" id="nome-titulo-{{ $titulo->numerobancario }}"> {{ $titulo->numerobancario }} </div>
-        <div class="col" id="nome-titulo-{{ $titulo->historico }}"> {{ $titulo->historico }} </div>
-        <div class="col d-flex">
-         @isset($titulo->pagamento)
-            <div  class="col" id="nome-titulo-status" name="pago"><font size=2 color="blue">Pago</font></div>
-         @endisset
-
-         @empty($titulo->pagamento)          
-            <?php 
-              $hoje = date('Y-m-d');
-              if ($titulo->vencimento<$hoje) {
-            ?>
-                @empty($titulo->pagamento)
-                  <div  class="col" id="nome-titulo-status" name="vencido1"><font size=2 color="red">Vencido</font></div>
-                @endempty
-            <?php } else { ?>
-                  <div  class="col" id="nome-titulo-status" name="avencer1"><font size=2 color="gray">Vencer</font></div>
+     <tbody>
+         <tr>
+            <?php  if (($titulo->numerobancario==0) && (is_null($titulo->pagamento))) {?>
+                     <td><span class="btn btn-success btn-sm ml-1"></span></td> 
             <?php } ?>
-              <div  class="col" id="nome-titulo-status" name="pedido1"><font size=2 color="gray"></font></div
-              <div  class="col" id="nome-titulo-status" name="faturamento1"><font size=2 color="gray"></font></div
-         @endempty
+             <?php  if (($titulo->numerobancario>0) && ($titulo->pagamento == null)) {?>
+                     <td><span class="btn btn-dark btn-sm ml-1"></td> 
+            <?php } ?>
+             <?php  if ($titulo->pagamento != null) {?>
+                     <td><span class="btn btn-danger btn-sm ml-1"></span></td> 
+            <?php } ?>     
 
-         </div>        
-    </div>    
+            <td id="nome-titulo-{{ $titulo->prefixo }}"> {{ $titulo->prefixo }} </td>
+            <td id="nome-titulo-{{ $titulo->titulo }}"> {{ $titulo->titulo }} </td>
+            <td id="nome-titulo-{{ $titulo->parcela }}"> {{ $titulo->parcela }} </td>
+            <td id="nome-titulo-{{ $titulo->cliente }}"> {{ $titulo->cliente }} </td>
+            <td id="nome-titulo-{{ $titulo->emissao }}"> {{ $dataEmissao }} </td>
+            <td id="nome-titulo-{{ $titulo->vencimento }}"> {{ $dataVencimento }} </td>
+            <td id="nome-titulo-{{ $titulo->valor }}"> {{ $titulo->valor }} </td>
+            <td id="nome-titulo-{{ $titulo->numerobancario }}"> {{ $titulo->numerobancario }} </td>
+            <td id="nome-titulo-{{ $titulo->historico }}"> {{ $titulo->historico }} </td>
+             @isset($titulo->pagamento)
+                <td id="nome-titulo-status" name="pago"><font size=2 color="blue">Pagos</font></td>
+             @endisset
+
+             @empty($titulo->pagamento)          
+                <?php 
+                  $hoje = date('Y-m-d');
+                  if ($titulo->vencimento<$hoje) {
+                ?>
+                    @empty($titulo->pagamento)
+                      <td id="nome-titulo-status" name="vencido1"><font size=2 color="red">Vencido</font></td>
+                    @endempty
+                <?php } else { ?>
+                      <td id="nome-titulo-status" name="avencer1"><font size=2 color="gray">Vencer</font></td>
+                <?php } ?>
+                  <td id="nome-titulo-status" name="pedido1"><font size=2 color="gray"></font></td>
+                  <td id="nome-titulo-status" name="faturamento1"><font size=2 color="gray"></font></td>
+             @endempty
+
+         </tr>        
+    </tbody>
+
     @endforeach
+
+ </table>
+
 @endsection
+
+<script>
+   function popavencerx(url) 
+   {
+    url = "{{ url('/posicao')}}";
+    newwindow=window.open(url,'name','height=550,width=800,screenX=0,screenY=0');
+   }
+
+   function poppagosx(url) 
+   {
+    url = "{{ url('/posicao')}}";
+    newwindow=window.open(url,'name2','height=550,width=800,screenX=50,screenY=50');
+   }
+
+   function popvencidosx(url) 
+   {
+    url = "{{ url('/posicao')}}";
+    newwindow=window.open(url,'name3','height=550,width=800,screenX=100,screenY=100');
+   }
+
+   function popfaturax(url) 
+   {
+    url = "{{ url('/posicao')}}";
+    newwindow=window.open(url,'name4','height=550,width=800,screenX=150,screenY=150');
+   }
+
+   function poppedidosx(url) 
+   {
+    url = "{{ url('/posicao')}}";
+    newwindow=window.open(url,'name5','height=550,width=800,screenX=200,screenY=200s');
+   }   
+
+   </script>

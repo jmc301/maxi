@@ -2,36 +2,31 @@
 
 namespace App\Services;
 
-use App\Cliente;
+use App\Pedido;
 use Illuminate\Http\Request;
-use App\Http\Requests\ClientesFormRequest;
+use App\Http\Requests\PedidosFormRequest;
 use Illuminate\Support\Facades\DB;
 
-class CriadorDeCliente
+class CriadorDePedido
 {
-    public function criarCliente(
-        ClientesFormRequest $request
-        ): Cliente {
+    public function criarPedido(
+        PedidosFormRequest $request
+        ): Pedido {
         DB::beginTransaction();
-        $cliente = Cliente::create([
-            'nome' => $request->nome,
-            'endereco' => $request->endereco,
-            'bairro' => $request->bairro,
-            'cidade' => $request->cidade,
-            'uf' => $request->uf,
-            'numero' => $request->numero,
-            'cep' => $request->cep,
-            'emailnfe' => $request->emailnfe,
-            'email' => $request->email,
-            'consumidorfina' => $request->consumidorfina,
-            'fiscaljuridico' => $request->fiscaljuridico,
-            'cnpjcpf' => $request->cnpjcpf,
-            'vendedor' => $request->vendedor,
-            'vendedor_id' => $request->vendedor     
+
+        $request->data = date('Y-m-d');
+
+        $pedido = Pedido::create([
+            'pedido' => $request->id,
+            'data' => $request->data,
+            'cliente_id' => $request->cliente_id,
+            'vendedor_id' => $request->cliente_id,
+            'condicao_pagamento' => $request->condicao_pagamento,
+            'valor' => $request->valor
         ]);
         DB::commit();
 
-        return $cliente;
+        return $pedido;
                     
     }
 

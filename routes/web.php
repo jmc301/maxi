@@ -13,23 +13,33 @@
 Route::get('/clientes', 'ClientesController@index')->name('listar_clientes');
 Route::get('/titulos', 'TitulosController@index')->name('listar_titulos');
 Route::get('/representantes', 'RepresentantesController@index')->name('listar_representantes');
-Route::get('/posicao', 'TitulosController@posicao')->name('listar_posicao');
+Route::get('/posicao/{id}', 'TitulosController@posicao')->name('listar_posicao');
+Route::get('/pedidos', 'PedidosController@index')->name('listar_pedidos');
+Route::get('/condpagamentos', 'CondPagamentosController@index')->name('listar_condpagamentos');
 
 Route::get('/clientes/criar', 'ClientesController@create')
     ->name('form_criar_cliente');
 Route::get('/titulos/criar', 'TitulosController@create')
     ->name('form_criar_titulo');
 Route::get('/representantes/criar', 'RepresentantesController@create')
-	->name('form_criar_representante');
+    ->name('form_criar_representante');
+Route::get('/pedidos/criar', 'PedidosController@create')
+    ->name('form_criar_pedido');
+Route::get('/condpagamentos/criar', 'CondpagamentosController@create')
+    ->name('form_criar_condpagamento');
     
 Route::post('/clientes/criar', 'ClientesController@store');
 Route::post('/titulos/criar', 'TitulosController@store');
 Route::post('/representantes/criar', 'RepresentantesController@Store');
+Route::post('/pedidos/criar', 'PedidosController@Store');
+Route::post('/condpagamentos/criar', 'CondpagamentosController@Store');
 
 Route::post('/clientes/{id}/alterar', 'ClientesController@update')
 	->name('form_alterar_cliente');
 Route::post('/titulos/{id}/alterar', 'TitulosController@update')
-	->name('form_alterar_titulo');
+    ->name('form_alterar_titulo');
+Route::post('/pedidos/{id}/alterar', 'PedidosController@update')
+    ->name('form_alterar_pedido');
 
 Route::post('/clientes/{id}/pesquisar', 'ClientesController@search')
     ->name('form_pesquisar_cliente');
@@ -43,9 +53,18 @@ Route::post('/titulos/{id}/gravar', 'TitulosController@storeup');
 Route::post('/representantes/{id}/alterar', 'RepresentantesController@update');
 Route::post('/representantes/{id}/gravar', 'RepresentantesController@storeup');
 
+Route::post('/condpagamentos/{id}/alterar', 'CondpagamentosController@update');
+Route::post('/condpagamentos/{id}/gravar', 'CondpagamentosController@storeup');
+
+Route::post('/pedidos/{id}/alterar', 'PedidosController@update');
+Route::post('/pedidos/{id}/gravar', 'PedidosController@storeup');
+
+Route::post('/pedidos/{id}/faturar', 'PedidosController@faturar');
+
 Route::delete('/clientes/{id}', 'ClientesController@destroy');
 Route::post('/titulos/{id}', 'TitulosController@destroy');
 Route::post('/representantes/{id}', 'RepresentantesController@destroy');
+Route::delete('/pedidos/{id}', 'PedidosController@destroy');
 
 Route::post('/clientes/{id}/editaNome', 'ClientesController@editaNome');
 

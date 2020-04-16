@@ -8,86 +8,85 @@ Cadastro de Clientes
 
 @include('mensagem', ['mensagem' => $mensagem])
 
-     <div class="btn btn-group d-flex justify-content-between mb-2 align-items-center">
-            <a href="{{ route('form_criar_cliente') }}" class=" btn-dark btn-group-item btn-ml">Adicionar</a>
-     	  	<form action="{{ url('/clientes')}}"  method="get">
-     	  	     <div>
-     	  	      @csrf
-         	  	  <input type="text" name="criterio" id="criterio" placeholder="Buscar..." class="btn-group-item">
-                  <span >
-                    <button type="submit">Ok!</button>
-                  </span>
-                  </div>
-     	  	</form>
-     </div>
+ <div class="btn btn-group d-flex justify-content-between mb-2 align-items-center">
+      <a href="{{ route('form_criar_cliente') }}" class=" btn-dark btn-group-item btn-ml">Adicionar</a>
+      <form action="{{ url('/clientes')}}"  method="get">
+        <div>
+            @csrf
+            <input type="text" name="criterio" id="criterio" placeholder="Buscar..." class="btn-group-item">
+            <span>
+                <button type="submit">Ok!</button>
+            </span>
+        </div>
+    </form>
+</div>
 
-
-      
-<ul class="list-group">
-	<li class="list-group-item d-flex justify-content-between align-items-baseline">
-		<span><strong>Codigo</strong></span>
-		<span><strong>Nome</strong></span> 
-		<span><strong>Vendedor</strong></span> 
-		<span><strong>CNPJ</strong></span> 
-		<span><strong>Status</strong></span> 
-	</li>
+<table class="table">
+    <thead>
+       <tr>
+    		<th><strong>Codigo</strong></th>
+    		<th><strong>Nome</strong></th>
+    		<th><strong>Vendedor</strong></th>
+    		<th><strong>CNPJ</strong> </th>
+    		<th><strong>Status</strong> </th>
+       </tr>
+    </thead>
 	
     @foreach($clientes as $cliente)
-    <?php  
-    $nomeRepresentante = "";
-    foreach ($representantes as $representante) {
-        if ($representante->id === $cliente->vendedor_id) {
-            $nomeRepresentante = $representante->nome;
+        <?php  
+        $nomeRepresentante = "";
+        foreach ($representantes as $representante) {
+            if ($representante->id === $cliente->vendedor_id) {
+                $nomeRepresentante = $representante->nome;
+            }
         }
-    }
-    ?>
-    <li class="list-group-item d-flex justify-content-between align-items-baseline">
-        <span id="nome-cliente-{{ $cliente->id }}"> {{ $cliente->id }} </span>
-        <span id="nome-cliente-{{ $cliente->nome }}"> {{ $cliente->nome }} </span>
-        <span id="nome-cliente-{{ $cliente->vendedor }}"> {{ $nomeRepresentante }} </span>
-        <span id="nome-cliente-{{ $cliente->cnpjcpf }}"> {{ $cliente->cnpjcpf }} </span>
+        ?>
 
-        <div class="input-group w-50" hidden id="input-nome-cliente-{{ $cliente->id }}">
-            <input type="text" class="form-control" value="{{ $cliente->nome }}">
-            <div class="input-group-append">
-                <button class="btn btn-primary" onclick="editarCliente({{ $cliente->id }})">
-                    <i class="fas fa-check"></i>
-                </button>
-                @csrf
-            </div>
-        </div>
+        <tbody>
+            <tr>    
+                <td id="nome-cliente-{{ $cliente->id }}"> {{ $cliente->id }} </td>
+                <td id="nome-cliente-{{ $cliente->nome }}"> {{ $cliente->nome }} </td>
+                <td id="nome-cliente-{{ $cliente->vendedor }}"> {{ $nomeRepresentante }} </td>
+                <td id="nome-cliente-{{ $cliente->cnpjcpf }}"> {{ $cliente->cnpjcpf }} </td>
 
-        <span class="d-flex">
-            <!--
-            <button class="btn btn-info btn-sm mr-1" onclick="toggleInput({{ $cliente->id }})">
-                <i class="fas fa-edit"></i>
-            </button>
-            -->
-            <form method="post" action="/clientes/{{ $cliente->id }}"
-                  onsubmit="return confirm('Tem certeza que deseja remover {{ addslashes($cliente->nome) }}?')">
-                @csrf
-                @method('DELETE')
-                <button class="btn btn-danger btn-sm">
-                    <i class="far fa-trash-alt" title="Excluir"></i>
-                </button>
-            </form>
-            <form method="post" action="/clientes/{{ $cliente->id }}/alterar">
-                @csrf
-                <button class="btn btn-success btn-sm ml-1">
-                    <i class="fab fa-adn" title="Alterar"></i>
-                </button>                
-            </form>
-            <form method="post" action="/clientes/{{ $cliente->id }}/pesquisar">
-                @csrf
-                <button class="btn btn-info btn-sm ml-1">
-                    <i class="fas fa-binoculars" title="Pesquisar"></i>
-                </button>                                
-            </form>            
-        </span>
-        
-    </li>
+                <div class="input-group w-50" hidden id="input-nome-cliente-{{ $cliente->id }}">
+                    <input type="text" class="form-control" value="{{ $cliente->nome }}">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" onclick="editarCliente({{ $cliente->id }})">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        @csrf
+                    </div>
+                </div>
+
+                <td>
+                    <span class="d-flex">
+                    <form method="post" action="/clientes/{{ $cliente->id }}"
+                          onsubmit="return confirm('Tem certeza que deseja remover {{ addslashes($cliente->nome) }}?')">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger btn-sm">
+                            <i class="far fa-trash-alt" title="Excluir"></i>
+                        </button>
+                    </form>
+                    <form method="post" action="/clientes/{{ $cliente->id }}/alterar">
+                        @csrf
+                        <button class="btn btn-success btn-sm ml-1">
+                            <i class="fab fa-adn" title="Alterar"></i>
+                        </button>                
+                    </form>
+                    <form method="post" action="/clientes/{{ $cliente->id }}/pesquisar">
+                        @csrf
+                        <button class="btn btn-info btn-sm ml-1">
+                            <i class="fas fa-binoculars" title="Pesquisar"></i>
+                        </button>                                
+                    </form>     
+                    </span>       
+                </td>
+            </tr>
+        </tbody>
     @endforeach
-</ul>
+</table>
 
 <script>
     function toggleInput(clienteId) {

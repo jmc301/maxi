@@ -50,7 +50,7 @@
         <div class="col col-4">
             <label for="emissao">Data Emissao<font color="red">*</font></label>
             <input type="date" class="form-control" name="emissao" id="emissao" maxlength="10" 
-            value="{{ $titulo->emissao}}">
+            value="{{ $titulo->emissao}}" disabled>
         </div>
 
         <div class="col col-4">
