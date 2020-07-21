@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\LeitorDeCliente;
 use App\Representante;
 use Illuminate\Support\Facades\DB;
+use Redirect;
+use PDF;
 
 class ClientesController extends Controller
 {
@@ -179,5 +181,15 @@ class ClientesController extends Controller
         $cliente->nome = $novoNome;
         $cliente->save();
     }
+
+    public function pdf(){
+
+        $data['clientes'] =  Cliente::get();
+        $representantes['representantes'] = Representante::query()->orderBy('nome')->get();
+     
+        $pdf = PDF::loadView('clientes.indexes', $data, $representantes);
+       
+        return $pdf->download('arquivo.pdf');
+    }    
     
 }

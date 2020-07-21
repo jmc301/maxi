@@ -52,6 +52,7 @@ Cadastro de Condição de Pagamento
             <form method="post" action="/condpagamentos/{{ $condpagamento->id }}"
                   onsubmit="return confirm('Tem certeza que deseja remover o cond.pagamento {{ addslashes($condpagamento->descricao) }} ?')">
                 @csrf
+                @method('DELETE')
                 <button class="btn btn-danger btn-sm" title="Excluir">
                     <i class="far fa-trash-alt"></i>
                 </button>

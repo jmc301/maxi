@@ -50,7 +50,7 @@
         <div class="col col-4">
             <label for="emissao">Data Emissao<font color="red">*</font></label>
             <input type="date" class="form-control" name="emissao" id="emissao" maxlength="10" 
-            value="{{ $titulo->emissao}}" disabled>
+            value="{{ $titulo->emissao}}" readonly>
         </div>
 
         <div class="col col-4">
@@ -96,7 +96,7 @@
         </div>
 
        <div class="col col-2" style="visibility:hidden" id="baixa2">
-             <label for="juros">Juros</label>
+             <label for="juros">Juros R$</label>
              <input type="text" class="form-control" name="juros" id="juros" maxlength="8"
              value="{{ $titulo->juros}}"> 
         </div>
@@ -109,20 +109,31 @@
 
     </div>
 
-    @empty($titulo->pagamento)
-      <button class="btn btn-primary mt-2" id="alterar-baixar">Alterar</button>
-    @endempty
+    <div class="row">
+        <div class="col col-7">
+          @empty($titulo->pagamento)
+            <button class="btn btn-primary mt-2" id="alterar-baixar">Alterar</button>
+          @endempty
 
-    @isset($titulo->pagamento)
-        <button class="btn btn-primary mt-2" onsubmit="return confirm('Deseja relamente Cancelar a Baixa ?')">
-          Cancelar Baixa
-        </button>
-    @endisset
+          @isset($titulo->pagamento)
+              <button class="btn btn-primary mt-2" onsubmit="return confirm('Deseja relamente Cancelar a Baixa ?')">
+                Cancelar Baixa
+              </button>
+          @endisset
+        </div>
+
+        <div class="col col-2" style="visibility:hidden" id="baixa4">
+             <label for="jurosperc">Juros %</label>
+             <input type="text" class="form-control" name="jurosperc" id="jurosperc" maxlength="8"
+             value="{{ $titulo->jurosperc}}"> 
+        </div>
+    </div>
 
     <div class="col col-2">
          <input type="text" class="form-control" name="id" id="id" hidden="true" value="{{ $titulo->id}}">
     </div>
 </form>
+
 <script type="text/javascript">
   var pagamento = (document.querySelector("#pagamento"));
   @isset($titulo->numerobancario)
@@ -144,6 +155,7 @@
             document.getElementById('baixa1').setAttribute('style', 'visibility:visible');
             document.getElementById('baixa2').setAttribute('style', 'visibility:visible');
             document.getElementById('baixa3').setAttribute('style', 'visibility:visible');
+            document.getElementById('baixa4').setAttribute('style', 'visibility:visible');
 
             alterarbaixar.textContent = "Baixar";
 
@@ -156,6 +168,7 @@
             document.getElementById('baixa1').setAttribute('style', 'visibility:hidden');
             document.getElementById('baixa2').setAttribute('style', 'visibility:hidden');
             document.getElementById('baixa3').setAttribute('style', 'visibility:hidden');      
+            document.getElementById('baixa4').setAttribute('style', 'visibility:hidden');      
             alterarbaixar.textContent = "Alterar";
        }
      });     
@@ -164,6 +177,7 @@
          document.getElementById('baixa1').setAttribute('style', 'visibility:visible');
          document.getElementById('baixa2').setAttribute('style', 'visibility:visible');
          document.getElementById('baixa3').setAttribute('style', 'visibility:visible');
+         document.getElementById('baixa4').setAttribute('style', 'visibility:visible');
          document.getElementById('desconto').readOnly  = true;
          document.getElementById('multa').readOnly  = true;
          document.getElementById('juros').readOnly  = true;
@@ -189,6 +203,7 @@
            document.getElementById('baixa1').setAttribute('style', 'visibility:visible');
            document.getElementById('baixa2').setAttribute('style', 'visibility:visible');
            document.getElementById('baixa3').setAttribute('style', 'visibility:visible');
+           document.getElementById('baixa4').setAttribute('style', 'visibility:visible');
 
            alterarbaixar.textContent = "Baixar";
 
@@ -202,6 +217,7 @@
             document.getElementById('baixa2').setAttribute('style', 'visibility:hidden')
             document.getElementById('baixa3').setAttribute('style', 'visibility:hidden')
             document.getElementById('baixa3').setAttribute('style', 'visibility:hidden');
+            document.getElementById('baixa4').setAttribute('style', 'visibility:hidden');
             alterarbaixar.textContent = "Alterar";
          }
        });      
@@ -211,6 +227,7 @@
          document.getElementById('baixa1').setAttribute('style', 'visibility:visible');
          document.getElementById('baixa2').setAttribute('style', 'visibility:visible');
          document.getElementById('baixa3').setAttribute('style', 'visibility:visible');
+         document.getElementById('baixa4').setAttribute('style', 'visibility:visible');
          document.getElementById('desconto').readOnly  = true;
          document.getElementById('multa').readOnly  = true;
          document.getElementById('juros').readOnly  = true;
@@ -247,20 +264,66 @@
   var valorMulta = document.querySelector("#multa");
   valorMulta.addEventListener("input", function() {
       var valorPagoComMulta = document.querySelector('#valor_pago');
-      valor = document.getElementById('valor').value;
-      multa = document.getElementById('multa').value;
-      juros = document.getElementById('juros').value;      
+      var valor = document.getElementById('valor').value;
+      var multa = document.getElementById('multa').value;
+      var juros = document.getElementById('juros').value;     
+      if(multa == null) { multa = 0}
+      if(multa == '') { multa = 0}
+      if(juros == null) { juros = 0}
+      if(juros == '') { juros = 0}
       valorPagoComMulta.value = (parseInt(valor) + parseInt(multa) + parseInt(juros));
    }); 
 
-  // Calcula Juros
+  // Calcula Juros em R$
   var valorJuros = document.querySelector("#juros");
   valorJuros.addEventListener("input", function() {
       var valorPagoComJuros = document.querySelector('#valor_pago');
-      valor = document.getElementById('valor').value;
-      multa = document.getElementById('multa').value;
-      juros = document.getElementById('juros').value;
-      valorPagoComJuros.value = (parseInt(valor) + parseInt(multa) + parseInt(juros));
+      var valor = document.getElementById('valor').value;
+      var desconto = document.getElementById('desconto').value;
+      var multa = document.getElementById('multa').value;
+      var juros = document.getElementById('juros').value;
+      if(desconto == null) { desconto = 0}
+      if(desconto == '') { desconto = 0}
+      if(multa == null) { multa = 0}
+      if(multa == '') { multa = 0}
+      if(juros == null) { juros = 0}
+      if(juros == '') { juros = 0}
+      valorPagoComJuros.value = (parseInt(valor) + parseInt(multa) + parseInt(juros) - parseInt(desconto));
+   }); 
+
+  // Calcula Juros em %
+  <?php 
+      $hoje = date('Y-m-d');
+      if ($titulo->vencimento<$hoje) {
+          $datetime1 = new DateTime($titulo->vencimento);
+          $datetime2 = new Datetime(date('Y-m-d'));
+          $interval = $datetime1->diff($datetime2);
+          $dias = $interval->format("%a");
+          $meses =  $dias / 30;
+      }
+   ?>
+
+  var valorJuros = document.querySelector("#jurosperc");
+  valorJuros.addEventListener("input", function() {
+      var valorPagoComJuros = document.querySelector('#valor_pago');
+      var valor = document.getElementById('valor').value;
+      var multa = document.getElementById('multa').value;
+      var jurosperc = document.getElementById('jurosperc').value;
+      var desconto = document.getElementById('desconto').value;
+      if(desconto == null) { desconto = 0}
+      if(desconto == '') { desconto = 0}
+      if(multa == null) { multa = 0}
+      if(multa == '') { multa = 0}
+      if(jurosperc == null) { jurosperc = 0}
+      if(jurosperc == '') { jurosperc = 0}
+      //valorPagoComJuros.value = (parseInt(valor);
+          valorPagoComJuros.value = (parseInt(valor) - parseInt(desconto) + 
+            parseInt(multa) + (parseInt(valor) * parseInt(jurosperc)/100) );
+
+      //for (var i = 1; i <= <?php $meses ?> ; i--) {
+        //  valorPagoComJuros.value = valorPagoComJuros.value - parseInt(desconto) + 
+          //  parseInt(multa) + (parseInt(valor) * parseInt(jurosperc)/100) );
+      //}
    }); 
 
 </script>

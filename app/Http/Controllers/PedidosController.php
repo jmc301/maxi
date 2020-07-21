@@ -6,7 +6,9 @@ use App\Http\Requests\PedidosFormRequest;
 use App\Pedido;
 use App\Cliente;
 use App\Nota;
-use App\Services\CriadorDePedido;
+use App\Condpagamento;
+use App\Services\CriadorDePedido; 
+use App\Services\CriadorDeTituloPedido;
 use App\Services\RemovedorDePedido;
 use App\Temporada;
 use Illuminate\Http\Request;
@@ -92,7 +94,8 @@ class PedidosController extends Controller
                 "representantes" => Representante::query()->orderBy('nome')->get()
               ],
                [
-                "clientes" => Cliente::query()->orderBy('nome')->get()
+                "clientes" => Cliente::query()->orderBy('nome')->get(),
+                "condpagamentos" => CondPagamento::query()->orderBy('descricao')->get()
                ]              
           );
     }
@@ -134,7 +137,8 @@ class PedidosController extends Controller
         return view('pedidos.update'
             , [
                 "pedido" => Pedido::find($id),
-                "clientes" => Cliente::query()->orderBy('nome')->get()
+                "clientes" => Cliente::query()->orderBy('nome')->get(),
+                "condpagamentos" => CondPagamento::query()->orderBy('descricao')->get()
               ]
             );
     }
@@ -158,13 +162,13 @@ class PedidosController extends Controller
         return redirect()->route('listar_pedidos');
     }
 
-    public function faturar(int $id, Request $request) {
+    public function faturar(int $id, Request $request, CriadorDeTituloPedido $criadorDeTituloPedido) {
         $pedido = Pedido::find($id);
+        $condpagamento = CondPagamento::find($pedido->condicao_pagamento);
 
         DB::beginTransaction();             
-        $pedido->status = 'F';       
-        $pedido->save();
 
+        // Gerar Nota Fiscal
         $nota = new Nota();
         $nota->nota = $pedido->id;
         $nota->data_emissao = date('Y-m-d');
@@ -172,6 +176,41 @@ class PedidosController extends Controller
         $nota->pedido_id = $pedido->id;
         $nota->valor = $pedido->valor;
         $nota->save();
+
+        $pedido->status = 'F';       
+        $pedido->nota = $nota->id;
+        $pedido->save();        
+
+        $quantidadeParcelas = 0;
+        if (isset($condpagamento->dias1))  $quantidadeParcelas++;
+        if (isset($condpagamento->dias2))  $quantidadeParcelas++;
+        if (isset($condpagamento->dias3))  $quantidadeParcelas++;
+        if (isset($condpagamento->dias4))  $quantidadeParcelas++;
+        if (isset($condpagamento->dias5))  $quantidadeParcelas++;
+        if (isset($condpagamento->dias6))  $quantidadeParcelas++;
+        if (isset($condpagamento->dias7))  $quantidadeParcelas++;
+        if (isset($condpagamento->dias8))  $quantidadeParcelas++;
+        if (isset($condpagamento->dias9))  $quantidadeParcelas++;
+        if (isset($condpagamento->dias10)) $quantidadeParcelas++;
+
+        $valorTitulo = ($pedido->valor / $quantidadeParcelas);
+
+        if (isset($condpagamento->dias1)) {
+          $tituloCriado = $criadorDeTituloPedido->criarTitulo($pedido, $quantidadeParcelas, $valorTitulo,  $condpagamento->dias1, 1);
+        }
+        if (isset($condpagamento->dias2)) {
+          $tituloCriado = $criadorDeTituloPedido->criarTitulo($pedido, $quantidadeParcelas, $valorTitulo,  $condpagamento->dias2, 2);
+        }
+        if (isset($condpagamento->dias3)) {
+          $tituloCriado = $criadorDeTituloPedido->criarTitulo($pedido, $quantidadeParcelas, $valorTitulo,  $condpagamento->dias3, 3);
+        }
+        if (isset($condpagamento->dias4)) {
+          $tituloCriado = $criadorDeTituloPedido->criarTitulo($pedido, $quantidadeParcelas, $valorTitulo,  $condpagamento->dias4, 4);
+        }
+        if (isset($condpagamento->dias5)) {
+          $tituloCriado = $criadorDeTituloPedido->criarTitulo($pedido, $quantidadeParcelas, $valorTitulo,  $condpagamento->dias5, 5);
+        }
+
         DB::commit();
 
         $request->session()
@@ -183,7 +222,7 @@ class PedidosController extends Controller
         return redirect()->route('listar_pedidos');
     }
 
-   public function search(int $id, Request $request)
+    public function search(int $id, Request $request)
     {
         
         return view('clientes.search'

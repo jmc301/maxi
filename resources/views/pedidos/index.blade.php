@@ -53,7 +53,7 @@ Cadastro de Pedidos
                 @endempty
 
                 @isset($pedido->status)
-                 <td id="nome-cliente-situacao">Faturado</td>
+                 <td id="nome-cliente-situacao">Faturado - NF {{ $pedido->id }}</td>
                 @endisset
 
                 <td>

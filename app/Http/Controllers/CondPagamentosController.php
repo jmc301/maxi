@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\CondPagamento;
+use App\Condpagamento;
 use App\Services\CriadorDeCondpagamento;
 use App\Services\RemovedorDeCondpagamento;
 use Illuminate\Http\Request;
@@ -48,7 +48,7 @@ class CondPagamentosController extends Controller
     
     public function destroy(Request $request, RemovedorDeCondPagamento $removedorDeCondPagamento)
     {
-        $nomeCondPagamento = $removedorDeCondPagamento->removerCondPagamento($request->id);
+        $nomeCondPagamento = $removedorDeCondPagamento->removeCondPagamento($request->id);
         $request->session()
         ->flash(
             'mensagem',
@@ -61,7 +61,7 @@ class CondPagamentosController extends Controller
     {
         return view('condpagamentos.update'
             , [
-                "condpagamento" => CondPagamento::find($id)
+                "condpagamento" => Condpagamento::find($id)
             ]
             );
     }

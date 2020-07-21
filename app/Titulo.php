@@ -21,7 +21,10 @@ class Titulo extends Model
         'desconto',
         'multa',
         'juros',
-        'valor_pago'
+        'jurosperc',
+        'valor_pago',
+        'pedido_id',
+        'nota_id'
     ];
        
 }

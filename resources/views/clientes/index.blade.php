@@ -1,12 +1,19 @@
 @extends('layout')
 
 @section('cabecalho')
-Cadastro de Clientes
+<div class="row">
+    <div class="col" style="hover:font-size: 5px;">Cadastro de Clientess</div>
+    <div class="col" align="right"><a href="{{ route('gerar_pdf') }}">
+         <img src="/storage/pdf/pdf.jpg" width="30px" height="40px" class="pdf"></a>  
+     </div>
+</div>      
 @endsection
 
 @section('conteudo')
 
+@isset($mensagem)
 @include('mensagem', ['mensagem' => $mensagem])
+@endisset
 
  <div class="btn btn-group d-flex justify-content-between mb-2 align-items-center">
       <a href="{{ route('form_criar_cliente') }}" class=" btn-dark btn-group-item btn-ml">Adicionar</a>

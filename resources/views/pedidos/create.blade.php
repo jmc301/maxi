@@ -33,12 +33,12 @@
             <label for="condicao_pagamento">Condição de Pagamento</label>
           </div>
           <select class="custom-select" name="condicao_pagamento" id="condicao_pagamento">
-            <option selected>Escolha...</option>
-            <option value="1">A Vista</option>
-            <option value="2">28D</option>
-            <option value="3">28/56/84</option>
-            <option value="4">07/14/21</option>
-            <option value="5">28/35/42/49</option>
+                   <option selected value="0" ></option>
+                   @<?php foreach ($condpagamentos as $condpagamento): { ?>
+                      $descricaoCondpagamento = "";
+                         <option value="{{ $condpagamento->id }}" > {{ $condpagamento->descricao }} </option>
+                      <?php } ?>
+                   <?php endforeach ?>                        
           </select>
         </div>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Titulo;
+use App\Cliente;
 use App\Services\CriadorDeTitulo;
 use App\Services\RemovedorDeTitulo;
 use Illuminate\Http\Request;
@@ -77,7 +78,39 @@ class TitulosController extends Controller
         return view('titulos.index', compact('titulos', 'mensagem'));
     }
 
-  public function posicao(Request $request) {
+    public function indexVencimento(Request $request) {
+        
+        if(!Auth::check()) {
+            echo "Não Autenticado";
+            exit();
+        }
+        
+        $letra = "";
+        if(isset($_GET['criterio'])) {
+            $letra = $_GET['criterio'];
+        }
+        
+        $titulos = Titulo::query()->orWhere('titulo', 'LIKE', '%' . $letra . '%')
+        ->orderBy('vencimento')
+        ->get();
+        
+        $contador = 0;
+        foreach ($titulos as $titulo) {
+            $contador++;
+        }
+  
+        if ($contador==0) {
+            $titulos = Titulo::query()
+            ->orderBy('titulo')
+            ->get();
+        }
+        
+        $mensagem = $request->session()->get('mensagem');
+        
+        return view('titulos.index', compact('titulos', 'mensagem'));
+    }
+    
+    public function posicao(Request $request) {
         
         $letra = "";
         if(isset($_GET['criterio'])) {
@@ -196,9 +229,10 @@ class TitulosController extends Controller
             }
         }
        
+        $cliente = Cliente::find($id);
         $mensagem = $request->session()->get('mensagem');
         
-        return view('posicao.index', compact('titulos', 'mensagem', 'id'));
+        return view('posicao.index', compact('titulos', 'mensagem', 'id', 'cliente'));
     }    
 
     public function create()
@@ -250,6 +284,7 @@ class TitulosController extends Controller
             $request->desconto = 0;
             $request->multa = 0;
             $request->juros = 0;
+            $request->jurosperc = 0;
             $request->valor_pago = 0;
          }
 
@@ -267,6 +302,7 @@ class TitulosController extends Controller
          $titulo->desconto    = $request->desconto;
          $titulo->multa    = $request->multa;
          $titulo->juros    = $request->juros;
+         $titulo->jurosperc = $request->jurosperc;
          $titulo->valor_pago    = $request->valor_pago;
 
         $titulo->save();

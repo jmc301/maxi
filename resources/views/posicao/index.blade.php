@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('cabecalho')
-Posição Financeira
+Posição Financeira:  {{ $cliente->nome }}
 @endsection
 
 @section('conteudo')
@@ -105,6 +105,8 @@ Posição Financeira
           <th><strong>Valor</strong></th>
           <th><strong>N&uacute;m.Banc&aacute;rio</strong></th>
           <th><strong>Hist&oacute;rico</strong></th>
+          <th><strong>Pedido</strong></th>  
+          <th><strong>NF</strong></th>  
           <th><strong>Status</strong></th>  
       </tr>
     </thead>
@@ -143,6 +145,8 @@ Posição Financeira
             <td id="nome-titulo-{{ $titulo->valor }}"> {{ $titulo->valor }} </td>
             <td id="nome-titulo-{{ $titulo->numerobancario }}"> {{ $titulo->numerobancario }} </td>
             <td id="nome-titulo-{{ $titulo->historico }}"> {{ $titulo->historico }} </td>
+            <td id="nome-titulo-{{ $titulo->pedido }}"> {{ $titulo->pedido_id }} </td>
+            <td id="nome-titulo-{{ $titulo->nota }}"> {{ $titulo->pedido_id }} </td>
              @isset($titulo->pagamento)
                 <td id="nome-titulo-status" name="pago"><font size=2 color="blue">Pagos</font></td>
              @endisset

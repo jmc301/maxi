@@ -12,6 +12,7 @@
 */
 Route::get('/clientes', 'ClientesController@index')->name('listar_clientes');
 Route::get('/titulos', 'TitulosController@index')->name('listar_titulos');
+Route::get('/titulosv', 'TitulosController@indexvencimento')->name('listar_titulos_vencimento');
 Route::get('/representantes', 'RepresentantesController@index')->name('listar_representantes');
 Route::get('/posicao/{id}', 'TitulosController@posicao')->name('listar_posicao');
 Route::get('/pedidos', 'PedidosController@index')->name('listar_pedidos');
@@ -55,6 +56,7 @@ Route::post('/representantes/{id}/gravar', 'RepresentantesController@storeup');
 
 Route::post('/condpagamentos/{id}/alterar', 'CondpagamentosController@update');
 Route::post('/condpagamentos/{id}/gravar', 'CondpagamentosController@storeup');
+Route::delete('/condpagamentos/{id}', 'CondPagamentosController@destroy');
 
 Route::post('/pedidos/{id}/alterar', 'PedidosController@update');
 Route::post('/pedidos/{id}/gravar', 'PedidosController@storeup');
@@ -89,8 +91,8 @@ Route::get('/menu',  function() {
 })->middleware('auth');
 
 Route::get('/', function() {
-	return view ('welcome');
-});
+	return view ('menu');
+})->middleware('auth');
 
 Route::get('/home',  function() {
         return view ('menu');
@@ -100,7 +102,18 @@ Route::get('/teste', function() {
     return view ('layout');
 });
 
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/produto', 'ProdutoController@index')->name('produto');
+
+Route::get('/produto/create', 'ProdutoController@create');
+Route::post('/produto/store', 'ProdutoController@store');
+
+Route::get('/produto/{id}/edit', 'ProdutoController@edit');
+Route::post('/produto/{id}/update', 'ProdutoController@update');
+Route::get('/produto/{id}/show', 'ProdutoController@show');
+Route::delete('/produto/{id}/destroy', 'ProdutoController@destroy');
+
+Route::get('/gerar-pdf', 'ClientesController@pdf')->name('gerar_pdf');

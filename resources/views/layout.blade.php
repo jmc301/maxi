@@ -13,6 +13,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <style>
+        img.pdf{
+            transition: all 0.5s;
+            cursor: pointer;        }
+
+        img.pdf:hover{
+            -webkit-transform: scale(1.5);
+            transform: scale(1.5);
+        }
+    </style>        
 </head>
 <body>
     <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2 d-flex justify-content-between"> -->
@@ -33,6 +43,7 @@
               </a>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="{{route('listar_clientes')}}"><strong>Clientes</strong></a>
+                <a class="dropdown-item" href="{{route('produto')}}"><strong>Produtos</strong></a>
                 <a class="dropdown-item" href="{{route('listar_representantes')}}"><strong>Vendedores</strong></a>
                 <a class="dropdown-item" href="{{route('listar_condpagamentos')}}"><strong>Condição de Pagamento</strong></a>
               </div>
@@ -41,7 +52,15 @@
 
         @auth()
         <a href="/sair" class="text-danger">Sair</a>  
-        @endauth()      
+        @endauth()
+<!--  
+     <div class="col-8"></div>
+     <div class="col-1">
+     	<a href="https://www.sintegra.gov.br/" target="_blank">
+     	   <img border="1" alt="Sintegra - Consulta CNPJ" src="https://www.sintegra.gov.br/figuras/logo.gif" width="50" height="50">
+     	</a>
+     </div>
+-->     
     </nav>
          
     <div class="container">

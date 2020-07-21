@@ -17,14 +17,15 @@ class RemovedorDePedido
 
             //$pedidos = Pedido::query()->orderBy('pedido')->get();
             //$clientes = Cliente::query('clientes')->where('id', '=', $letra)
-            $notas = Nota::query('notas')->where('pedido_id', '=', $pedido-_id);
+            //$notas = Nota::query()->where('pedido_id', '=', $pedido->id);
+            //$notas = Nota::query()->get(); 
+            //$notax = Nota::query()->where('pedido_id', '=', $pedidoId);
+            //$notas = Nota::query()->where('pedido_id', '=', $pedidoId);
 
-            if (!empty($notas)) {
-                foreach ($notas as $nota) {
-                    if ($idPedido == $nota->pedido_id) {
-                        $nota->delete();
-                    }
-                }
+            $nota = Nota::find($pedido->nota);
+
+            if (!empty($nota)) {
+                $nota->delete();
             }
 
             $pedido->delete();

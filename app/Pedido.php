@@ -14,7 +14,8 @@ class Pedido extends Model
          'vendedor_id',
          'condicao_pagamento',
          'valor',
-         'status'
+         'status',
+         'nota'
      ];
 
     public static function indexLetra($letra) {

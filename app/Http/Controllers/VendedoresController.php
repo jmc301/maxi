@@ -10,6 +10,11 @@ use App\Http\Requests\RepresentantesFormRequest;
 
 class RepresentantesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    
     public function index(Request $request) {
         
         $letra = "";
