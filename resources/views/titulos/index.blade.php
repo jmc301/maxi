@@ -115,10 +115,21 @@ Cadastro de T&iacute;tulos
                     </form>
                     <form method="post" action="/titulos/{{ $titulo->id}}/alterar">
                           @csrf
-                          <button class="btn btn-danger btn-sm ml-1" title="Alterar">
-                             <i class="fab fa-adn"></i>
-                          </button>                
+                          <button class="btn btn-primary btn-sm ml-1"><i class="fa fa-pencil-square-o"></i> Alterar</button>                               
                     </form>
+                    @empty($titulo->pagamento)
+                    <form method="post" action="/titulos/{{ $titulo->id}}/baixar">
+                          @csrf
+                          <button class="btn btn-primary btn-sm ml-1"><i class="fa fa-pencil-square-o"></i>&nbspBaixar&nbsp</button>                               
+                    </form>
+                    @endempty
+                    @isset($titulo->pagamento)
+                    <form method="post" action="/titulos/{{ $titulo->id}}/baixar">
+                          @csrf
+                          <button class="btn btn-primary btn-sm ml-1"><i class="fa fa-pencil-square-o"></i>  
+                            <strike>&nbspBaixar&nbsp</strike></button>                               
+                    </form>
+                    @endisset                 
                 </div>    
                 </td>    
             </tr>

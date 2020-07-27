@@ -274,8 +274,47 @@ class TitulosController extends Controller
             ]
             );
     }
-    
+
     public function storeup(int $id, Request $request) {
+        $titulo = Titulo::find($id);
+        
+        if (empty($titulo->pagamento)) {
+             $titulo->prefixo = $request->prefixo;
+             $titulo->parcela = $request->parcela;
+             $titulo->emissao  = $request->emissao;
+             $titulo->vencimento = $request->vencimento;
+             $titulo->pagamento  = $request->pagamento;
+             $titulo->cliente   = $request->cliente;
+             $titulo->valor    = $request->valor;
+             $titulo->numerobancario = $request->numerobancario;
+             $titulo->historico = $request->historico;                
+             $titulo->desconto    = $request->desconto;
+             $titulo->multa    = $request->multa;
+             $titulo->juros    = $request->juros;
+             $titulo->jurosperc = $request->jurosperc;
+             $titulo->valor_pago    = $request->valor_pago;
+
+            $titulo->save();
+            
+            $request->session()
+            ->flash(
+                'mensagem',
+                "Titulo {$titulo->id} alterado com sucesso {$titulo->titulo}"
+            );
+        }
+        return redirect()->route('listar_titulos');
+    }
+    
+    public function baixar(int $id, Request $request)
+    {
+        return view('titulos.baixar'
+            , [
+                "titulo" => Titulo::find($id)
+            ]
+            );
+    }
+
+    public function baixarup(int $id, Request $request) {
         $titulo = Titulo::find($id);
         
         // Realiza o Cancelamento do Titulo
@@ -288,40 +327,22 @@ class TitulosController extends Controller
             $request->valor_pago = 0;
          }
 
-
-
-         $titulo->prefixo = $request->prefixo;
-         $titulo->parcela = $request->parcela;
-         $titulo->emissao  = $request->emissao;
-         $titulo->vencimento = $request->vencimento;
-         $titulo->pagamento  = $request->pagamento;
-         $titulo->cliente   = $request->cliente;
-         $titulo->valor    = $request->valor;
-         $titulo->numerobancario = $request->numerobancario;
-         $titulo->historico = $request->historico;                
-         $titulo->desconto    = $request->desconto;
-         $titulo->multa    = $request->multa;
-         $titulo->juros    = $request->juros;
-         $titulo->jurosperc = $request->jurosperc;
-         $titulo->valor_pago    = $request->valor_pago;
-
+        $titulo->pagamento  = $request->pagamento;
+        $titulo->desconto   = $request->desconto;
+        $titulo->multa      = $request->multa;
+        $titulo->juros      = $request->juros;
+        $titulo->jurosperc  = $request->jurosperc;
+        $titulo->valor_pago = $request->valor_pago;
+        
         $titulo->save();
         
         $request->session()
         ->flash(
             'mensagem',
-            "Titulo {$titulo->id} alterado com sucesso {$titulo->titulo}"
+            "Titulo {$titulo->id} baixado com sucesso {$titulo->titulo}"
         );
         
         return redirect()->route('listar_titulos');
     }
-    
-//     public function editaNome(int $id, Request $request)
-//     {
-//         $cliente = Cliente::find($id);
-//         $novoNome = $request->nome;
-//         $cliente->nome = $novoNome;
-//         $cliente->save();
-//     }
-    
+        
 }

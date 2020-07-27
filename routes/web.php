@@ -42,6 +42,9 @@ Route::post('/titulos/{id}/alterar', 'TitulosController@update')
 Route::post('/pedidos/{id}/alterar', 'PedidosController@update')
     ->name('form_alterar_pedido');
 
+Route::post('/titulos/{id}/baixar', 'TitulosController@baixar')
+    ->name('form_baixar_titulo');
+
 Route::post('/clientes/{id}/pesquisar', 'ClientesController@search')
     ->name('form_pesquisar_cliente');
 
@@ -50,6 +53,7 @@ Route::post('/clientes/{id}/gravar', 'ClientesController@storeup');
 
 Route::post('/titulos/{id}/alterar', 'TitulosController@update');
 Route::post('/titulos/{id}/gravar', 'TitulosController@storeup');
+Route::post('/titulos/{id}/baixarup', 'TitulosController@baixarup');
 
 Route::post('/representantes/{id}/alterar', 'RepresentantesController@update');
 Route::post('/representantes/{id}/gravar', 'RepresentantesController@storeup');

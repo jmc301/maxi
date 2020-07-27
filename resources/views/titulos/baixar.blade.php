@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('cabecalho')
-    Alterar T&iacute;tulo
+    Baixar T&iacute;tulo
 @endsection
 
 @section('conteudo')
@@ -21,7 +21,34 @@
   }
 </style>
 
-<form method="post" action="/titulos/{{ $titulo->id }}/gravar">
+ <?php 
+      $hojeBaixar = date('Y-m-d');
+      $baixado = "baixado";
+
+      if (!$titulo->pagamento) {
+          $titulo->pagamento = $hojeBaixar;
+          $baixado = null;
+      }
+
+      if ($titulo->vencimento<$hojeBaixar) {
+          $datetime1 = new DateTime($titulo->vencimento);
+          $datetime2 = new Datetime(date('Y-m-d'));
+          $interval = $datetime1->diff($datetime2);
+          $dias = $interval->format("%a");
+          $percJurosDia =  number_format((5 / 30), 2, '.', '');
+          $percJurosTotal =  $dias * $percJurosDia;
+
+          //$number = number_format($number, 2, '.', '');
+
+          $titulo->juros = number_format((($titulo->valor * $percJurosTotal) / 100), 2, '.', '');
+      }
+
+      if (!$titulo->valor_pago) {
+          $titulo->valor_pago = ($titulo->valor + $titulo->juros - $titulo->desconto);
+      }      
+ ?>
+
+<form method="post" action="/titulos/{{ $titulo->id }}/baixarup">
     @csrf
     <div class="row">
         <div class="col col-2">
@@ -32,19 +59,19 @@
          <div class="col col-1">
             <label for="prefixo">Prefixo<font color="red">*</font></label>
             <input type="text" class="form-control" name="prefixo" id="prefixo" maxlength="3" 
-            value="{{ $titulo->prefixo}}">
+            value="{{ $titulo->prefixo}}" readonly>
         </div>
                
         <div class="col col-2 ">
             <label for="parcela">Parcela</label>
             <input type="text" class="form-control desabilita" name="parcela" id="parcela" maxlength="1" 
-            value="{{ $titulo->parcela}}">
+            value="{{ $titulo->parcela}}" readonly>
         </div>
 
         <div class="col col-7">
             <label for="cliente">Cliente<font color="red">*</font></label>
             <input type="text" class="form-control" name="cliente" id="cliente" maxlength="5" 
-            value="{{ $titulo->cliente}}">
+            value="{{ $titulo->cliente}}" readonly>
         </div>
 
         <div class="col col-4">
@@ -56,73 +83,81 @@
         <div class="col col-4">
             <label for="vencimento">Vencimento<font color="red">*</font></label>
             <input type="date" class="form-control" name="vencimento" id="vencimento" maxlength="10" 
-            value="{{ $titulo->vencimento}}">
+            value="{{ $titulo->vencimento}}" readonly>
         </div>
 
         <div class="col col-4">
             <label for="valor">Valor</label>
             <input type="text" class="form-control" name="valor" id="valor" maxlength="8" 
-            value="{{ $titulo->valor}}">
+            value="{{ $titulo->valor}}" readonly>
         </div>
 
         <div class="col col-4">
             <label for="numerobancario">N&uacute;mero Banc&aacute;rio</label>
             <input type="text" class="form-control" name="numerobancario" id="numerobancario" maxlength="12" 
-            value="{{ $titulo->numerobancario}}">
+            value="{{ $titulo->numerobancario}}" readonly>
         </div>
 
         <div class="col col-8">
              <label for="historico">Hist&oacute;rico</label>
              <input type="text" class="form-control" name="historico" id="historico" maxlength="40" 
-             value="{{ $titulo->historico}}">
+             value="{{ $titulo->historico}}" readonly>
         </div>
-
-        @isset($titulo->pagamento)
-        <div class="col col-2">
+        
+        <div class="col col-3">
              <label for="pagamento">Data de Pagamento</label>
              <input type="date" class="form-control" name="pagamento" id="pagamento" maxlength="10" 
              value="{{ $titulo->pagamento }}">
         </div>
-        @endisset
-        
+
         <div class="col col-2" id="baixa">
              <label for="desconto">Desconto</label>
              <input type="text" class="form-control" name="desconto" id="desconto" maxlength="8"
              value="{{ $titulo->desconto}}">
         </div>
 
-        <div class="col col-1" id="baixa1">
+        <div class="col col-2" id="baixa1">
              <label for="multa">Multa</label>
              <input type="text" class="form-control" name="multa" id="multa" maxlength="8"
              value="{{ $titulo->multa}}"> 
         </div>
 
-       <div class="col col-3" id="baixa2">
+       <div class="col col-2" id="baixa2">
              <label for="juros">Juros</label>
              <input type="text" class="form-control" name="juros" id="juros" maxlength="8"
              value="{{ $titulo->juros}}"> 
         </div>
 
-       <div class="col col-4" id="baixa3">
+       <div class="col col-2" id="baixa3">
              <label for="valor_pago">Valor Pago</label>
              <input type="text" class="form-control" name="valor_pago" id="valor_pago" maxlength="8"
              value="{{ $titulo->valor_pago}}">
         </div>
 
+       @empty($baixado)
+       <div class="col col-1" id="baixa5">
+             <label for="dias_atrazo">Atrazo</label>
+             <input type="text" class="form-control" name="dias_atrazo" id="dias_atrazo" maxlength="7"
+             value="{{ $dias }} dias" disabled="" style="font-size: 13px">
+        </div>
+        @endempty
+
     </div>
 
     <div class="row">
         <div class="col col-7">
-          @empty($titulo->pagamento)
-            <button class="btn btn-primary mt-2" id="alterar-baixar">Alterar</button>
+          @empty($baixado)
+            <button class="btn btn-primary mt-2" id="alterar-baixar">Baixar</button>
           @endempty
 
-          @isset($titulo->pagamento)
-              <button class="btn btn-primary mt-2">Voltar</button>
+          @isset($baixado)
+              <button class="btn btn-primary mt-2" onsubmit="return confirm('Deseja relamente Cancelar a Baixa ?')">
+                Cancelar Baixa
+              </button>
           @endisset
         </div>
 
-        <div class="col col-2" style="visibility:hidden" id="baixa4" hidden>
+        <div class="col col-2" hidden id="baixa4">
              <label for="jurosperc">Juros %</label>
              <input type="text" class="form-control" name="jurosperc" id="jurosperc" maxlength="8"
              value="{{ $titulo->jurosperc}}"> 
@@ -135,124 +170,17 @@
 </form>
 
 <script type="text/javascript">
+  @isset($baixado)
+     document.getElementById('pagamento').readOnly  = true;
+     document.getElementById('desconto').readOnly  = true;
+     document.getElementById('multa').readOnly  = true;
+     document.getElementById('juros').readOnly  = true;
+     document.getElementById('valor_pago').readOnly  = true;  
+  @endisset
+
   var pagamento = (document.querySelector("#pagamento"));
-  @isset($titulo->numerobancario)
-     document.getElementById('prefixo').readOnly  = true;
-     document.getElementById('parcela').readOnly  = true;
-     document.getElementById('cliente').readOnly  = true;
-     document.getElementById('emissao').readOnly  = true;
-     document.getElementById('vencimento').readOnly = true;
-     document.getElementById('valor').readOnly = true;
-     document.getElementById('numerobancario').readOnly = true;
 
-     var dataPagamento = document.querySelector("#pagamento");
-     var alterarbaixar = document.querySelector("#alterar-baixar");
-
-     dataPagamento.addEventListener("input", function() {
-
-       if (dataPagamento.value.length > 0) {
-            document.getElementById('baixa').setAttribute('style', 'visibility:visible');
-            document.getElementById('baixa1').setAttribute('style', 'visibility:visible');
-            document.getElementById('baixa2').setAttribute('style', 'visibility:visible');
-            document.getElementById('baixa3').setAttribute('style', 'visibility:visible');
-            document.getElementById('baixa4').setAttribute('style', 'visibility:visible');
-
-            alterarbaixar.textContent = "Baixar";
-
-            @empty($titulo->pagamento)
-              var valorPagos = document.querySelector('#valor_pago');
-              valorPagos.value = document.getElementById('valor').value;
-            @endempty
-       } else {
-            document.getElementById('baixa').setAttribute('style', 'visibility:hidden');
-            document.getElementById('baixa1').setAttribute('style', 'visibility:hidden');
-            document.getElementById('baixa2').setAttribute('style', 'visibility:hidden');
-            document.getElementById('baixa3').setAttribute('style', 'visibility:hidden');      
-            document.getElementById('baixa4').setAttribute('style', 'visibility:hidden');      
-            alterarbaixar.textContent = "Alterar";
-       }
-     });     
-     if (dataPagamento.value.length > 0) {
-         document.getElementById('baixa').setAttribute('style', 'visibility:visible');
-         document.getElementById('baixa1').setAttribute('style', 'visibility:visible');
-         document.getElementById('baixa2').setAttribute('style', 'visibility:visible');
-         document.getElementById('baixa3').setAttribute('style', 'visibility:visible');
-         document.getElementById('baixa4').setAttribute('style', 'visibility:visible');
-         document.getElementById('desconto').readOnly  = true;
-         document.getElementById('multa').readOnly  = true;
-         document.getElementById('juros').readOnly  = true;
-         document.getElementById('valor_pago').readOnly  = true;
-
-         //alterarbaixar.textContent = "Baixar";
-
-         @empty($titulo->pagamento)
-           var valorPagos = document.querySelector('#valor_pago');
-           valorPagos.value = document.getElementById('valor').value;
-         @endempty
-     }
-  @endisset
-
-  @empty($titulo->numerobancario)
-     var dataPagamento = document.querySelector("#pagamento");
-     var alterarbaixar = document.querySelector("#alterar-baixar");
-
-       dataPagamento.addEventListener("input", function() {
-
-       if (dataPagamento.value.length > 0) {
-           document.getElementById('baixa').setAttribute('style', 'visibility:visible');
-           document.getElementById('baixa1').setAttribute('style', 'visibility:visible');
-           document.getElementById('baixa2').setAttribute('style', 'visibility:visible');
-           document.getElementById('baixa3').setAttribute('style', 'visibility:visible');
-           document.getElementById('baixa4').setAttribute('style', 'visibility:visible');
-
-           alterarbaixar.textContent = "Baixar";
-
-           @empty($titulo->pagamento)
-             var valorPagos = document.querySelector('#valor_pago');
-             valorPagos.value = document.getElementById('valor').value;
-           @endempty
-         } else {
-            document.getElementById('baixa').setAttribute('style', 'visibility:hidden');
-            document.getElementById('baixa1').setAttribute('style', 'visibility:hidden');
-            document.getElementById('baixa2').setAttribute('style', 'visibility:hidden')
-            document.getElementById('baixa3').setAttribute('style', 'visibility:hidden')
-            document.getElementById('baixa3').setAttribute('style', 'visibility:hidden');
-            document.getElementById('baixa4').setAttribute('style', 'visibility:hidden');
-            alterarbaixar.textContent = "Alterar";
-         }
-       });      
-
-       if (dataPagamento.value.length > 0) {
-         document.getElementById('baixa').setAttribute('style', 'visibility:visible');
-         document.getElementById('baixa1').setAttribute('style', 'visibility:visible');
-         document.getElementById('baixa2').setAttribute('style', 'visibility:visible');
-         document.getElementById('baixa3').setAttribute('style', 'visibility:visible');
-         document.getElementById('baixa4').setAttribute('style', 'visibility:visible');
-         document.getElementById('desconto').readOnly  = true;
-         document.getElementById('multa').readOnly  = true;
-         document.getElementById('juros').readOnly  = true;
-         document.getElementById('valor_pago').readOnly  = true;
-
-         @empty($titulo->pagamento)
-           var valorPagos = document.querySelector('#valor_pago');
-           valorPagos.value = document.getElementById('valor').value;
-        @endempty
-       }        
-  @endempty
-
-  @isset($titulo->pagamento)
-     document.getElementById('prefixo').readOnly = true;
-     document.getElementById('parcela').readOnly = true;
-     document.getElementById('cliente').readOnly = true;
-     document.getElementById('emissao').readOnly = true;
-     document.getElementById('vencimento').readOnly = true;
-     document.getElementById('valor').readOnly = true;
-     document.getElementById('numerobancario').readOnly = true;
-     document.getElementById('historico').readOnly = true;
-     document.getElementById('pagamento').readOnly = true;
-  @endisset
-
-  // Calcula Desconto
+    // Calcula Desconto
   var valorDesconto = document.querySelector("#desconto");
   valorDesconto.addEventListener("input", function() {
       var valorPagoComDesconto = document.querySelector('#valor_pago');
@@ -325,6 +253,7 @@
           //  parseInt(multa) + (parseInt(valor) * parseInt(jurosperc)/100) );
       //}
    }); 
+
 
 </script>
 @endsection
